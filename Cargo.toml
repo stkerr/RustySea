@@ -1,0 +1,5 @@
+[package]
+
+name = "rusty_sea"
+version = "0.0.1"
+authors = [ "Sam Kerr <kerr.sam@gmail.com>" ]
