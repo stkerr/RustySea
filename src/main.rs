@@ -106,21 +106,11 @@ fn print_bigint(val: &BigInt) {
     }
 }
 
-fn convert_nibbles_to_u64(values: &Vec<u8>) -> u64 {
+fn convert_nibbles_to_u64(values: &[u8]) -> u64 {
     // We need to turn this buffer into a u64 now
     let mut temp:u64 = 0;
-    for i in values {
-        temp = temp << 4;
-
-        unsafe {
-            // We need to unsafely convert a u8 to a u64. Note that
-            // the host endian-ness will matter here.
-            use std::mem;
-            let i_64_buffer = [0u8,0u8,0u8,0u8,0u8,0u8,0u8,i.clone()];
-            let i_64 = mem::transmute::<[u8; 8], u64>(i_64_buffer);
-            let i_64_be = u64::from_be(i_64);
-            temp = temp | i_64_be;           
-        }
+    for &i in values {
+        temp = temp << 4 | i as u64;
     }
     return temp;
 }
