@@ -22,8 +22,29 @@ fn add_with_carry(a: u64, b:u64) -> (u64, u64) {
     };
 }
 
+#[derive(Debug)]
+enum Error { NotImplementedError }
+
 impl BigInt {
-    
+
+    fn left_shift(&self, quantity: &BigInt) -> Result<BigInt, Error> {
+        return Err(Error::NotImplementedError);
+    }
+
+    fn div(&self, b: &BigInt) -> Result<(BigInt, BigInt), Error> {
+        return Err(Error::NotImplementedError);
+    }
+
+    fn mult(&self, b: &BigInt) -> Result<BigInt, Error> {
+        // TODO: Make this implementation faster using Karatsuba
+        // multiplication or almost any other algorithm.
+
+
+        // We can write A*B=C as a series of doubles and adds
+        // of A with itself.
+        return Err(Error::NotImplementedError);
+    }
+
     fn add(&self, b: &BigInt) -> BigInt {
         let mut result:BigInt = BigInt {length:0, data: vec![] };
 
@@ -93,10 +114,20 @@ fn main() {
     print_bigint(&d);
 
     // Do 5+10=15
+    let one = create_bigint_from_string("1");
     let five = create_bigint_from_string("5");
     let ten = create_bigint_from_string("10");
     let fifteen = five.add(&ten);
     print_bigint(&fifteen);
+
+    // Do some shifts
+    let seven = create_bigint_from_string("7");
+    let shifted:Result<BigInt, Error> = seven.left_shift(&one);
+    match shifted {
+        Ok(v) => print_bigint(&v),
+        Err(e) => println!("Error {:?}", e)
+    }
+    
 }
 
 fn print_bigint(val: &BigInt) {
