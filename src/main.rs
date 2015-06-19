@@ -1,4 +1,4 @@
-struct BigInt {
+pub struct BigInt {
     length: usize,
     negative:bool,
     data: Vec<u64>
@@ -46,7 +46,7 @@ fn signed_add_with_carry(a: u64, a_negative: bool, b:u64, b_negative: bool) -> (
 }
 
 #[derive(Debug)]
-enum Error { NotImplementedError }
+pub enum Error { NotImplementedError, HexParsingError }
 
 impl BigInt {
 
@@ -282,11 +282,19 @@ impl BigInt {
 fn main() {
     println!("Hello, world!");
 
+/*
     // Create some integers. Make them overflow.
     let mut a = create_bigint_from_string("FFFFFFFFFFFFFFFF");
     let mut b = create_bigint_from_string("FFFFFFFFFFFFFFFF");
-    let mut c = a.add(&b);
-    let mut d = c.add(&b);
+    let mut c = match a { 
+        Ok(v) => v.add(&b),
+        Err(e) => panic!(e)
+    };
+
+    let mut d = match c {
+        Ok(v) => v.add(&b),
+        Err(e) => panic!(e)
+    };
 
     let (e, f, g) = signed_add_with_carry(0xFFFFFFFFFFFFFFFF, true, 0xFFFFFFFFFFFFFFFF, true);
     println!("signed a + b = {}. Carry/Borrow: {}. Negative: {}", e, f, g);
@@ -303,9 +311,12 @@ fn main() {
     // print_bigint(&d);
 
     // Do 5+10=15
-    let one = create_bigint_from_string("1");
-    let five = create_bigint_from_string("5");
-    let ten = create_bigint_from_string("10");
+    let one_result = create_bigint_from_string("1");
+    let one = match one_result { Ok(v) => v, Err(e) => panic!(e)};
+    let five_result = create_bigint_from_string("5");
+    let five = match five_result { Ok(v) => v, Err(e) => panic!(e)};
+    let ten_result = create_bigint_from_string("10");
+    let ten = match ten_result { Ok(v) => v, Err(e) => panic!(e)};
     let fifteen = five.add(&ten);
     print_bigint(&fifteen);
 
@@ -319,7 +330,8 @@ fn main() {
     println!("larger ?= larger => {}", c.compare(&c));
 
     // Do some shifts
-    let seven = create_bigint_from_string("7");
+    let seven_result = create_bigint_from_string("7");
+    let seven = match seven_result { Ok(v) => v, Err(e) => panic!(e)};
     let shifted:Result<BigInt, Error> = seven.left_shift(&one);
     match shifted {
         Ok(v) => print_bigint(&v),
@@ -342,7 +354,7 @@ fn main() {
     println!("a2:");print_bigint(&a2);
     println!("a3:");print_bigint(&a3);
     println!("a3 + a2 = "); print_bigint(&a3.add(&a2));
-
+*/
 }
 
 fn print_bigint(val: &BigInt) {
@@ -363,7 +375,13 @@ fn convert_nibbles_to_u64(values: &[u8]) -> u64 {
 }
 
 
-fn create_bigint_from_string(val: &str) -> BigInt {
+pub fn create_bigint_from_string(val: &str) -> Result<BigInt, Error> {
+
+    if(val.len() == 0) {
+        return Err(Error::HexParsingError)
+    }
+
+    println!("Len(str): {}", val.len());
     let mut the_data: Vec<u64> = Vec::new();
 
     let mut values:Vec<u8> = Vec::new();
@@ -371,10 +389,22 @@ fn create_bigint_from_string(val: &str) -> BigInt {
     // Iterate over each character from right to left, since
     // we are taking the number in big-endian form.
     let mut is_negative:bool = false;
+
+    // We should remove leading zeros before starting to save data
+    let mut should_remove_zeros = true;
+
     for c in val.chars().rev() {
 
         if c == '-' {
             is_negative = true;
+            continue;
+        }
+
+        if c != '0' && should_remove_zeros {
+            // We got a non-zero number, so no longer remove a
+            //leading zero.
+            should_remove_zeros = false;
+        } else if c == '0' && should_remove_zeros {
             continue;
         }
 
@@ -401,5 +431,273 @@ fn create_bigint_from_string(val: &str) -> BigInt {
         the_data.push(temp);
     }
 
-    return BigInt { length:the_data.len(), negative:is_negative, data: the_data} ;
+    return Ok(BigInt { length:the_data.len(), negative:is_negative, data: the_data});
+}
+
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test_string_parsing() {
+        let mut a:Result<BigInt,Error>;
+        a = create_bigint_from_string("3");
+        match a {
+            Ok(v) => {
+                assert!(v.length == 1);
+                assert!(v.data[0] == 3);
+                assert!(v.negative == false);
+            }
+            Err(e) => panic!(e)
+        };
+
+        a = create_bigint_from_string("-3");
+        match a {
+            Ok(v) => {
+                assert!(v.length == 1);
+                assert!(v.data[0] == 3);
+                assert!(v.negative == true);
+            }
+            Err(e) => panic!(e)
+        }
+    }
+
+    #[test]
+    fn test_string_parsing_empty_string() {
+        let a_result:Result<BigInt,Error> = create_bigint_from_string("");
+        let a:BigInt = match a_result {
+            Ok(v) => v,
+            Err(e) => panic!(e)
+        };
+        assert!(a.length == 1);
+        assert!(a.data[0] == 0);
+        assert!(a.negative == false);    
+    }
+
+    #[test]
+    fn test_string_parsing_negativeonly_string() {
+        let a_result:Result<BigInt,Error> = create_bigint_from_string("-");
+        let a:BigInt = match a_result {
+            Ok(v) => v,
+            Err(e) => panic!(e)
+        };
+        assert!(a.length == 1);
+        assert!(a.data[0] == 0);
+        assert!(a.negative == false);    
+    }
+
+    #[test]
+    fn test_string_parsing_invalid_string() {
+        let a_result:Result<BigInt,Error> = create_bigint_from_string("Hello world!");
+        let a:BigInt = match a_result {
+            Ok(v) => v,
+            Err(e) => panic!(e)
+        };
+    }
+
+    #[test]
+    fn test_string_parsing_zero() {
+        let a_result:Result<BigInt,Error> = create_bigint_from_string("0");
+        let a:BigInt = match a_result {
+            Ok(v) => v,
+            Err(e) => panic!(e)
+        };
+        assert!(a.length == 1);
+        assert!(a.data[0] == 0);
+        assert!(a.negative == false);
+    }
+
+    #[test]
+    fn test_string_parsing_negative_zero() {
+        let a_result:Result<BigInt,Error> = create_bigint_from_string("-0");
+        let a:BigInt = match a_result {
+            Ok(v) => v,
+            Err(e) => panic!(e)
+        };
+        assert!(a.length == 1);
+        assert!(a.data[0] == 0);
+        assert!(a.negative == false);
+    }
+
+    #[test]
+    fn test_string_parsing_leadingzeros() {
+        let mut a_result:Result<BigInt,Error> = create_bigint_from_string("0000");
+        let mut a:BigInt = match a_result {
+            Ok(v) => v,
+            Err(e) => panic!(e)
+        };
+        assert!(a.length == 1);
+        assert!(a.data[0] == 0);
+        assert!(a.negative == false);
+
+        a_result = create_bigint_from_string("-00003");
+        a = match a_result {
+            Ok(v) => v,
+            Err(e) => panic!(e)
+        };
+        assert!(a.length == 1);
+        assert!(a.data[0] == 3);
+        assert!(a.negative == true);
+
+        a_result = create_bigint_from_string("00003");
+        a = match a_result {
+            Ok(v) => v,
+            Err(e) => panic!(e)
+        };
+        assert!(a.length == 1);
+        assert!(a.data[0] == 3);
+        assert!(a.negative == false);
+    }
+
+    #[test]
+    fn test_string_parsing_negativezero_length_two() {
+        let a_result:Result<BigInt,Error> = create_bigint_from_string("00000000000000000000000000000000000000000000000000000000000000");
+        let a:BigInt = match a_result {
+            Ok(v) => v,
+            Err(e) => panic!(e)
+        };
+        assert!(a.length == 1);
+        assert!(a.data[0] == 0);
+        assert!(a.negative == true);
+    }
+
+    #[test]
+    fn test_string_parsing_length_two() {
+        let mut a_result:Result<BigInt,Error> = create_bigint_from_string("3FFFFFFFFFFFFFFFF");
+        let mut a:BigInt = match a_result {
+            Ok(v) => v,
+            Err(e) => panic!(e)
+        };
+        assert!(a.length == 2);
+        assert!(a.data[0] == 0xFFFFFFFFFFFFFFFF);
+        assert!(a.data[1] == 3);
+        assert!(a.negative == false);
+
+        a_result = create_bigint_from_string("-3FFFFFFFFFFFFFFFF");
+        a = match a_result {
+            Ok(v) => v,
+            Err(e) => panic!(e)
+        };
+        assert!(a.length == 2);
+        assert!(a.data[0] == 0xFFFFFFFFFFFFFFFF);
+        assert!(a.data[1] == 3);
+        assert!(a.negative == true);
+
+    }
+
+    #[test]
+    fn test_basic_add_positive_positive_nocarry() {
+        let mut a_result:Result<BigInt,Error> = create_bigint_from_string("7");
+        let a:BigInt = match a_result {
+            Ok(v) => v,
+            Err(e) => panic!(e)
+        };
+
+        let mut b_result:Result<BigInt,Error> = create_bigint_from_string("7");
+        let b:BigInt = match b_result {
+            Ok(v) => v,
+            Err(e) => panic!(e)
+        };
+        let c:BigInt = a.add(&b);
+        assert!(c.length == 1);
+        assert!(c.negative == false);
+        assert!(c.data[0] == 14);
+    }
+
+    #[test]
+    fn test_basic_add_positive_negative_nocarry_positiveresult() {
+        let mut a_result:Result<BigInt,Error> = create_bigint_from_string("7");
+        let a:BigInt = match a_result {
+            Ok(v) => v,
+            Err(e) => panic!(e)
+        };
+
+        let mut b_result:Result<BigInt,Error> = create_bigint_from_string("-3");
+        let b:BigInt = match b_result {
+            Ok(v) => v,
+            Err(e) => panic!(e)
+        };
+
+        let c:BigInt = a.add(&b);
+        assert!(c.length == 1);
+        assert!(c.negative == false);
+        assert!(c.data[0] == 4);
+    }
+
+    #[test]
+    fn test_basic_add_positive_negative_nocarry_negativeresult() {
+        let mut a_result:Result<BigInt,Error> = create_bigint_from_string("7");
+        let a:BigInt = match a_result {
+            Ok(v) => v,
+            Err(e) => panic!(e)
+        };
+
+        let mut b_result:Result<BigInt,Error> = create_bigint_from_string("-8");
+        let b:BigInt = match b_result {
+            Ok(v) => v,
+            Err(e) => panic!(e)
+        };
+        let c:BigInt = a.add(&b);
+        assert!(c.length == 1);
+        assert!(c.negative == true);
+        assert!(c.data[0] == 1);
+    }
+
+    #[test]
+    fn test_basic_add_negative_positive_nocarry_positiveresult() {
+        let mut a_result:Result<BigInt,Error> = create_bigint_from_string("-7");
+        let a:BigInt = match a_result {
+            Ok(v) => v,
+            Err(e) => panic!(e)
+        };
+
+        let mut b_result:Result<BigInt,Error> = create_bigint_from_string("8");
+        let b:BigInt = match b_result {
+            Ok(v) => v,
+            Err(e) => panic!(e)
+        };
+        let c:BigInt = a.add(&b);
+        assert!(c.length == 1);
+        assert!(c.negative == false);
+        assert!(c.data[0] == 1);
+    }
+
+    #[test]
+    fn test_basic_add_negative_positive_nocarry_negativeresult() {
+        let mut a_result:Result<BigInt,Error> = create_bigint_from_string("-7");
+        let a:BigInt = match a_result {
+            Ok(v) => v,
+            Err(e) => panic!(e)
+        };
+
+        let mut b_result:Result<BigInt,Error> = create_bigint_from_string("3");
+        let b:BigInt = match b_result {
+            Ok(v) => v,
+            Err(e) => panic!(e)
+        };
+        let c:BigInt = a.add(&b);
+        assert!(c.length == 1);
+        assert!(c.negative == true);
+        assert!(c.data[0] == 4);
+    }    
+
+    #[test]
+    fn test_basic_add_negative_negative_nocarry() {
+        let mut a_result:Result<BigInt,Error> = create_bigint_from_string("-3");
+        let a:BigInt = match a_result {
+            Ok(v) => v,
+            Err(e) => panic!(e)
+        };
+
+        let mut b_result:Result<BigInt,Error> = create_bigint_from_string("-3");
+        let b:BigInt = match b_result {
+            Ok(v) => v,
+            Err(e) => panic!(e)
+        };
+        let c:BigInt = a.add(&b);
+        assert!(c.length == 1);
+        assert!(c.negative == true);
+        assert!(c.data[0] == 6);
+    }
 }
