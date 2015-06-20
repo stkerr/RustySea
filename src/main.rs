@@ -381,7 +381,6 @@ pub fn create_bigint_from_string(val: &str) -> Result<BigInt, Error> {
         return Err(Error::HexParsingError)
     }
 
-    println!("Len(str): {}", val.len());
     let mut the_data: Vec<u64> = Vec::new();
 
     let mut values:Vec<u8> = Vec::new();
@@ -390,29 +389,30 @@ pub fn create_bigint_from_string(val: &str) -> Result<BigInt, Error> {
     // we are taking the number in big-endian form.
     let mut is_negative:bool = false;
 
-    // We should remove leading zeros before starting to save data
-    let mut should_remove_zeros = true;
+    let mut val_vec:Vec<char> = val.chars().collect::<Vec<char>>();
 
-    for c in val.chars().rev() {
+    // Process the negative symbol
+    if val.starts_with("-") {
+        is_negative = true;
+        val_vec.remove(0);
+    }
 
-        if c == '-' {
-            is_negative = true;
-            continue;
-        }
+    // Strip the leading zeros
+    while val_vec.len() > 1 && val_vec.get(0) == Some(&'0') {
+        val_vec.remove(0);
+    }
 
-        if c != '0' && should_remove_zeros {
-            // We got a non-zero number, so no longer remove a
-            //leading zero.
-            should_remove_zeros = false;
-        } else if c == '0' && should_remove_zeros {
-            continue;
-        }
+    if val_vec.len() == 0 {
+        return Err(Error::HexParsingError);
+    }
+
+    for c in val_vec.iter().rev() {
 
         let digit:Option<u32> = c.to_digit(16);
         
         match digit {
             e @ Some(0...0xFF) => values.insert(0, e.unwrap() as u8),
-            _ => println!("Invalid character {}", c)
+            _ => return Err(Error::HexParsingError)
         };
     
         // If we have enough nibbles for a 64-bit integer, make one
@@ -464,35 +464,42 @@ mod tests {
     }
 
     #[test]
+    fn test_string_parsing_two_characters() {
+        let a:Result<BigInt,Error> = create_bigint_from_string("350");
+        match a {
+            Ok(v) => {
+                assert!(v.length == 1);
+                assert!(v.data[0] == 0x350);
+                assert!(v.negative == false);
+            },
+            Err(e) => panic!(e)
+        }
+    }
+
+    #[test]
     fn test_string_parsing_empty_string() {
         let a_result:Result<BigInt,Error> = create_bigint_from_string("");
-        let a:BigInt = match a_result {
-            Ok(v) => v,
-            Err(e) => panic!(e)
+        let a:Error = match a_result {
+            Ok(v) => panic!(v),
+            Err(e) => e
         };
-        assert!(a.length == 1);
-        assert!(a.data[0] == 0);
-        assert!(a.negative == false);    
     }
 
     #[test]
     fn test_string_parsing_negativeonly_string() {
         let a_result:Result<BigInt,Error> = create_bigint_from_string("-");
-        let a:BigInt = match a_result {
-            Ok(v) => v,
-            Err(e) => panic!(e)
+        let a = match a_result {
+            Ok(v) => panic!(v),
+            Err(e) => e
         };
-        assert!(a.length == 1);
-        assert!(a.data[0] == 0);
-        assert!(a.negative == false);    
     }
 
     #[test]
     fn test_string_parsing_invalid_string() {
         let a_result:Result<BigInt,Error> = create_bigint_from_string("Hello world!");
-        let a:BigInt = match a_result {
-            Ok(v) => v,
-            Err(e) => panic!(e)
+        match a_result {
+            Ok(v) => panic!(v),
+            Err(e) => e
         };
     }
 
@@ -517,7 +524,7 @@ mod tests {
         };
         assert!(a.length == 1);
         assert!(a.data[0] == 0);
-        assert!(a.negative == false);
+        assert!(a.negative == true);
     }
 
     #[test]
@@ -552,7 +559,7 @@ mod tests {
 
     #[test]
     fn test_string_parsing_negativezero_length_two() {
-        let a_result:Result<BigInt,Error> = create_bigint_from_string("00000000000000000000000000000000000000000000000000000000000000");
+        let a_result:Result<BigInt,Error> = create_bigint_from_string("-00000000000000000000000000000000000000000000000000000000000000");
         let a:BigInt = match a_result {
             Ok(v) => v,
             Err(e) => panic!(e)
