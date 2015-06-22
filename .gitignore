@@ -2,3 +2,5 @@ src/testing/tmp*
 src/tmp*
 obj/
 target/
+rusty_sea.rsproj
+Cargo.lock

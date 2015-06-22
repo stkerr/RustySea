@@ -1,6 +1,18 @@
 use rusty_sea::*;
 
 #[test]
+fn test_operator_add() {
+    if let Ok(v) = create_bigint_from_string("5") {
+        let a:BigInt = v;
+        if let Ok(v) = create_bigint_from_string("6") {
+            let b:BigInt = v;
+            let c = a + b;
+            assert!(c.data[0] == 11);
+        }
+    }
+}
+
+#[test]
 fn test_basic_add_positive_positive_nocarry() {
     let mut a_result:Result<BigInt,Error> = create_bigint_from_string("7");
     let a:BigInt = match a_result {
