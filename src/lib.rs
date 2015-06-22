@@ -231,7 +231,7 @@ impl BigInt {
 
             // Add each of the u64 for a&b until there aren't anymore
             let mut borrow:u64 = 0;
-            let mut temp_is_negative:bool = false;
+            // let mut temp_is_negative:bool = false;
             for i in 0..std::cmp::min(self.length, b.length) {
 
                 // Add the raw values
@@ -353,7 +353,7 @@ impl BigInt {
     }
 }
 
-fn print_bigint(val: &BigInt) {
+pub fn print_bigint(val: &BigInt) {
     println!("Stored values: {} ", val.length);
     println!("Negative: {}", val.negative);
     for i in &val.data {

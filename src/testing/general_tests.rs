@@ -40,7 +40,7 @@ fn test_string_parsing_two_characters() {
 #[test]
 fn test_string_parsing_empty_string() {
     let a_result:Result<BigInt,Error> = create_bigint_from_string("");
-    let a:Error = match a_result {
+    match a_result {
         Ok(v) => panic!(v),
         Err(e) => e
     };
@@ -49,7 +49,7 @@ fn test_string_parsing_empty_string() {
 #[test]
 fn test_string_parsing_negativeonly_string() {
     let a_result:Result<BigInt,Error> = create_bigint_from_string("-");
-    let a = match a_result {
+    match a_result {
         Ok(v) => panic!(v),
         Err(e) => e
     };
@@ -157,13 +157,13 @@ fn test_string_parsing_length_two() {
 
 #[test]
 fn test_basic_sub_positive_positive_nocarry_positiveresult() {
-    let mut a_result:Result<BigInt,Error> = create_bigint_from_string("7");
+    let a_result:Result<BigInt,Error> = create_bigint_from_string("7");
     let a:BigInt = match a_result {
         Ok(v) => v,
         Err(e) => panic!(e)
     };
 
-    let mut b_result:Result<BigInt,Error> = create_bigint_from_string("1");
+    let b_result:Result<BigInt,Error> = create_bigint_from_string("1");
     let b:BigInt = match b_result {
         Ok(v) => v,
         Err(e) => panic!(e)
@@ -176,13 +176,13 @@ fn test_basic_sub_positive_positive_nocarry_positiveresult() {
 
 #[test]
 fn test_basic_sub_positive_positive_nocarry_negativeresult() {
-    let mut a_result:Result<BigInt,Error> = create_bigint_from_string("7");
+    let a_result:Result<BigInt,Error> = create_bigint_from_string("7");
     let a:BigInt = match a_result {
         Ok(v) => v,
         Err(e) => panic!(e)
     };
 
-    let mut b_result:Result<BigInt,Error> = create_bigint_from_string("8");
+    let b_result:Result<BigInt,Error> = create_bigint_from_string("8");
     let b:BigInt = match b_result {
         Ok(v) => v,
         Err(e) => panic!(e)
@@ -195,13 +195,13 @@ fn test_basic_sub_positive_positive_nocarry_negativeresult() {
 
 #[test]
 fn test_basic_sub_positive_negative_nocarry_positiveresult() {
-    let mut a_result:Result<BigInt,Error> = create_bigint_from_string("7");
+    let a_result:Result<BigInt,Error> = create_bigint_from_string("7");
     let a:BigInt = match a_result {
         Ok(v) => v,
         Err(e) => panic!(e)
     };
 
-    let mut b_result:Result<BigInt,Error> = create_bigint_from_string("-3");
+    let b_result:Result<BigInt,Error> = create_bigint_from_string("-3");
     let b:BigInt = match b_result {
         Ok(v) => v,
         Err(e) => panic!(e)
@@ -215,13 +215,13 @@ fn test_basic_sub_positive_negative_nocarry_positiveresult() {
 
 #[test]
 fn test_basic_sub_negative_positive_nocarry() {
-    let mut a_result:Result<BigInt,Error> = create_bigint_from_string("-7");
+    let a_result:Result<BigInt,Error> = create_bigint_from_string("-7");
     let a:BigInt = match a_result {
         Ok(v) => v,
         Err(e) => panic!(e)
     };
 
-    let mut b_result:Result<BigInt,Error> = create_bigint_from_string("8");
+    let b_result:Result<BigInt,Error> = create_bigint_from_string("8");
     let b:BigInt = match b_result {
         Ok(v) => v,
         Err(e) => panic!(e)
@@ -234,13 +234,13 @@ fn test_basic_sub_negative_positive_nocarry() {
 
 #[test]
 fn test_basic_sub_negative_negative_nocarry_positiveresult() {
-    let mut a_result:Result<BigInt,Error> = create_bigint_from_string("-3");
+    let a_result:Result<BigInt,Error> = create_bigint_from_string("-3");
     let a:BigInt = match a_result {
         Ok(v) => v,
         Err(e) => panic!(e)
     };
 
-    let mut b_result:Result<BigInt,Error> = create_bigint_from_string("-4");
+    let b_result:Result<BigInt,Error> = create_bigint_from_string("-4");
     let b:BigInt = match b_result {
         Ok(v) => v,
         Err(e) => panic!(e)
@@ -253,13 +253,13 @@ fn test_basic_sub_negative_negative_nocarry_positiveresult() {
 
 #[test]
 fn test_basic_sub_negative_negative_nocarry_negativeresult() {
-    let mut a_result:Result<BigInt,Error> = create_bigint_from_string("-3");
+    let a_result:Result<BigInt,Error> = create_bigint_from_string("-3");
     let a:BigInt = match a_result {
         Ok(v) => v,
         Err(e) => panic!(e)
     };
 
-    let mut b_result:Result<BigInt,Error> = create_bigint_from_string("-2");
+    let b_result:Result<BigInt,Error> = create_bigint_from_string("-2");
     let b:BigInt = match b_result {
         Ok(v) => v,
         Err(e) => panic!(e)

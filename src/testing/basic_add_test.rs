@@ -1,26 +1,97 @@
 use rusty_sea::*;
 
 #[test]
-fn test_operator_add() {
+fn test_operator_add_positive_positive() {
     if let Ok(v) = create_bigint_from_string("5") {
         let a:BigInt = v;
         if let Ok(v) = create_bigint_from_string("6") {
             let b:BigInt = v;
             let c = a + b;
             assert!(c.data[0] == 11);
+        } else {
+            panic!("Failed to initialize from string.");
         }
+    } else {
+            panic!("Failed to initialize from string.");
+    }
+}
+
+#[test]
+fn test_operator_add_positive_negative_positiveresult() {
+    if let Ok(v) = create_bigint_from_string("5") {
+        let a:BigInt = v;
+        if let Ok(v) = create_bigint_from_string("-4") {
+            let b:BigInt = v;
+            let c = a + b;
+            assert!(c.data[0] == 1);
+            assert!(c.negative == false);
+        } else {
+            panic!("Failed to initialize from string.");
+        }
+    } else {
+        panic!("Failed to initialize from string.");
+    }
+}
+
+#[test]
+fn test_operator_add_positive_negative_negativeresult() {
+    if let Ok(v) = create_bigint_from_string("5") {
+        let a:BigInt = v;
+        if let Ok(v) = create_bigint_from_string("-6") {
+            let b:BigInt = v;
+            let c = a + b;
+            assert!(c.data[0] == 1);
+            assert!(c.negative == true);
+        } else {
+            panic!("Failed to initialize from string.");
+        }
+    } else {
+        panic!("Failed to initialize from string.");
+    }
+}
+
+#[test]
+fn test_operator_add_negative_positive() {
+    if let Ok(v) = create_bigint_from_string("-5") {
+        let a:BigInt = v;
+        if let Ok(v) = create_bigint_from_string("6") {
+            let b:BigInt = v;
+            let c = a + b;
+            assert!(c.data[0] == 1);
+        } else {
+            panic!("Failed to initialize from string.");
+        }
+    } else {
+        panic!("Failed to initialize from string.");
+    }
+}
+
+#[test]
+fn test_operator_add_negative_negative() {
+    if let Ok(v) = create_bigint_from_string("-5") {
+        let a:BigInt = v;
+        if let Ok(v) = create_bigint_from_string("-6") {
+            let b:BigInt = v;
+            let c = a + b;
+            assert!(c.data[0] == 11);
+            assert!(c.negative == true);
+        } else {
+            panic!("Failed to initialize from string.");
+        }
+    } else {
+        panic!("Failed to initialize from string.");
     }
 }
 
 #[test]
 fn test_basic_add_positive_positive_nocarry() {
-    let mut a_result:Result<BigInt,Error> = create_bigint_from_string("7");
+    let a_result:Result<BigInt,Error> = create_bigint_from_string("7");
     let a:BigInt = match a_result {
         Ok(v) => v,
         Err(e) => panic!(e)
     };
 
-    let mut b_result:Result<BigInt,Error> = create_bigint_from_string("7");
+    let b_result:Result<BigInt,Error> = create_bigint_from_string("7");
     let b:BigInt = match b_result {
         Ok(v) => v,
         Err(e) => panic!(e)
@@ -33,13 +104,13 @@ fn test_basic_add_positive_positive_nocarry() {
 
 #[test]
 fn test_basic_add_positive_negative_nocarry_positiveresult() {
-    let mut a_result:Result<BigInt,Error> = create_bigint_from_string("7");
+    let a_result:Result<BigInt,Error> = create_bigint_from_string("7");
     let a:BigInt = match a_result {
         Ok(v) => v,
         Err(e) => panic!(e)
     };
 
-    let mut b_result:Result<BigInt,Error> = create_bigint_from_string("-3");
+    let b_result:Result<BigInt,Error> = create_bigint_from_string("-3");
     let b:BigInt = match b_result {
         Ok(v) => v,
         Err(e) => panic!(e)
@@ -53,13 +124,13 @@ fn test_basic_add_positive_negative_nocarry_positiveresult() {
 
 #[test]
 fn test_basic_add_positive_negative_nocarry_negativeresult() {
-    let mut a_result:Result<BigInt,Error> = create_bigint_from_string("7");
+    let a_result:Result<BigInt,Error> = create_bigint_from_string("7");
     let a:BigInt = match a_result {
         Ok(v) => v,
         Err(e) => panic!(e)
     };
 
-    let mut b_result:Result<BigInt,Error> = create_bigint_from_string("-8");
+    let b_result:Result<BigInt,Error> = create_bigint_from_string("-8");
     let b:BigInt = match b_result {
         Ok(v) => v,
         Err(e) => panic!(e)
@@ -72,13 +143,13 @@ fn test_basic_add_positive_negative_nocarry_negativeresult() {
 
 #[test]
 fn test_basic_add_negative_positive_nocarry_positiveresult() {
-    let mut a_result:Result<BigInt,Error> = create_bigint_from_string("-7");
+    let a_result:Result<BigInt,Error> = create_bigint_from_string("-7");
     let a:BigInt = match a_result {
         Ok(v) => v,
         Err(e) => panic!(e)
     };
 
-    let mut b_result:Result<BigInt,Error> = create_bigint_from_string("8");
+    let b_result:Result<BigInt,Error> = create_bigint_from_string("8");
     let b:BigInt = match b_result {
         Ok(v) => v,
         Err(e) => panic!(e)
@@ -91,13 +162,13 @@ fn test_basic_add_negative_positive_nocarry_positiveresult() {
 
 #[test]
 fn test_basic_add_negative_positive_nocarry_negativeresult() {
-    let mut a_result:Result<BigInt,Error> = create_bigint_from_string("-7");
+    let a_result:Result<BigInt,Error> = create_bigint_from_string("-7");
     let a:BigInt = match a_result {
         Ok(v) => v,
         Err(e) => panic!(e)
     };
 
-    let mut b_result:Result<BigInt,Error> = create_bigint_from_string("3");
+    let b_result:Result<BigInt,Error> = create_bigint_from_string("3");
     let b:BigInt = match b_result {
         Ok(v) => v,
         Err(e) => panic!(e)
@@ -110,13 +181,13 @@ fn test_basic_add_negative_positive_nocarry_negativeresult() {
 
 #[test]
 fn test_basic_add_negative_negative_nocarry() {
-    let mut a_result:Result<BigInt,Error> = create_bigint_from_string("-3");
+    let a_result:Result<BigInt,Error> = create_bigint_from_string("-3");
     let a:BigInt = match a_result {
         Ok(v) => v,
         Err(e) => panic!(e)
     };
 
-    let mut b_result:Result<BigInt,Error> = create_bigint_from_string("-3");
+    let b_result:Result<BigInt,Error> = create_bigint_from_string("-3");
     let b:BigInt = match b_result {
         Ok(v) => v,
         Err(e) => panic!(e)

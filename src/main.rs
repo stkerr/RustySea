@@ -11,11 +11,13 @@ fn main() {
         Err(e) => panic!(e)
     };
     let b_result = rusty_sea::create_bigint_from_string("FFFFFFFFFFFFFFFF");
-    let mut b = match b_result {
+    let b = match b_result {
         Ok(v) => v,
         Err(e) => panic!(e)
     };
     let c = a.add(&b);
+    println!("C = ");
+    rusty_sea::print_bigint(&c);
 /*
     let mut d = match c {
         Ok(v) => v.add(&b),
