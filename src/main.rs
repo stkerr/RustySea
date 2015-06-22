@@ -18,6 +18,8 @@ fn main() {
     let c = a.add(&b);
     println!("C = ");
     rusty_sea::print_bigint(&c);
+
+    let d = a & b;
 /*
     let mut d = match c {
         Ok(v) => v.add(&b),
