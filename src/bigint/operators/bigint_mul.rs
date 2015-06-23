@@ -1,7 +1,7 @@
-use super::super::super::*;
+use ::bigint::BigInt;
 
 use std;
-use std::ops::*;
+use std::ops::Mul;
 
 impl Mul for BigInt {
 	type Output = BigInt;

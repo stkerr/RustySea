@@ -1,4 +1,6 @@
-use rusty_sea::*;
+extern crate rusty_sea;
+use rusty_sea::bigint::*;
+use rusty_sea::bigint::utilities::*;
 
 #[test]
 fn test_operator_add_positive_positive() {

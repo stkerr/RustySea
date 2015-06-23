@@ -1,4 +1,6 @@
-use super::super::super::*;
+use ::bigint;
+use ::bigint::BigInt;
+use ::bigint::utilities;
 
 use std;
 use std::ops::*;
@@ -29,11 +31,11 @@ impl Add for BigInt {
         for i in 0..std::cmp::min(self.length, b.length) {
 
             // Add the raw values
-            let (interim, internal_carry) = add_with_carry(self.data[i], b.data[i]);
+            let (interim, internal_carry) = ::bigint::utilities::add_with_carry(self.data[i], b.data[i]);
             let temp_carry:u64= internal_carry + carry;
 
             // Add the previous carry value
-            let (interim, internal_carry) = add_with_carry(interim, carry);
+            let (interim, internal_carry) = ::bigint::utilities::add_with_carry(interim, carry);
             carry = internal_carry + temp_carry;
 
             // Add the digit to the BigInt
@@ -56,14 +58,14 @@ impl Add for BigInt {
             Some(x) => {
                 println!("Unequal sizes, parsing the longer.");
                 for i in starting_index..x.length {
-                    let (next, next_carry) = add_with_carry(x.data[i], carry);
+                    let (next, next_carry) = ::bigint::utilities::add_with_carry(x.data[i], carry);
                     carry = next_carry;
                     result.data.push(next);
                     result.length = result.length + 1;
                 }
                 carry = 0; // no carry since we just added all the carry positions
             },
-            None => println!("Same length.")
+            None => {}
         }
          
         // Add the final carry if there is one

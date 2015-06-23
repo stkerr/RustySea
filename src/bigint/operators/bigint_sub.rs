@@ -1,4 +1,4 @@
-use super::super::super::*;
+use ::bigint::BigInt;
 
 use std;
 use std::ops::*;
@@ -46,11 +46,11 @@ impl Sub for BigInt {
 	        for i in 0..std::cmp::min(self.length, b.length) {
 
 	            // Add the raw values
-	            let (interim, internal_borrow, temp_is_negative) = signed_add_with_carry(self.data[i], self.negative, b.data[i], true);
+	            let (interim, internal_borrow, temp_is_negative) = ::bigint::utilities::signed_add_with_carry(self.data[i], self.negative, b.data[i], true);
 	            let temp_borrow:u64= internal_borrow + borrow;
 	            println!("Interim: {} from {} and {}", interim, self.data[i], b.data[i]);
 	            // Add the previous borrow value
-	            let (interim, internal_borrow, temp_is_negative) = signed_add_with_carry(interim, temp_is_negative, temp_borrow, true);
+	            let (interim, internal_borrow, temp_is_negative) = ::bigint::utilities::signed_add_with_carry(interim, temp_is_negative, temp_borrow, true);
 	            borrow = internal_borrow + temp_borrow;
 
 	            // Add the digit to the BigInt
@@ -73,13 +73,13 @@ impl Sub for BigInt {
 	            Some(x) => {
 	                println!("Unequal sizes, parsing the longer.");
 	                for i in starting_index..x.length {
-	                    let (next, next_borrow) = add_with_carry(x.data[i], borrow);
+	                    let (next, next_borrow) = ::bigint::utilities::add_with_carry(x.data[i], borrow);
 	                    borrow = next_borrow;
 	                    result.data.push(next);
 	                    result.length = result.length + 1;
 	                }
 	            },
-	            None => println!("Same length.")
+	            None => {}
 	        }
 	         
 	        // Subtract the final borrow if there is one

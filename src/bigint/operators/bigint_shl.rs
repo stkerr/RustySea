@@ -1,4 +1,4 @@
-use super::super::super::*;
+use ::bigint::BigInt;
 
 use std;
 use std::ops::*;

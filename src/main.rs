@@ -3,23 +3,28 @@ extern crate rusty_sea;
 fn main() {
     println!("Hello, world!");
 
-
     // Create some integers. Make them overflow.
-    let a_result = rusty_sea::create_bigint_from_string("FFFFFFFFFFFFFFFF");
-    let a = match a_result {
+    let a_result = rusty_sea::bigint::utilities::create_bigint_from_string("FFFFFFFFFFFFFFFF");
+    let a:rusty_sea::bigint::BigInt = match a_result {
         Ok(v) => v,
         Err(e) => panic!(e)
     };
-    let b_result = rusty_sea::create_bigint_from_string("FFFFFFFFFFFFFFFF");
-    let b = match b_result {
+    let b_result = rusty_sea::bigint::utilities::create_bigint_from_string("FFFFFFFFFFFFFFFF");
+    let b:rusty_sea::bigint::BigInt = match b_result {
         Ok(v) => v,
         Err(e) => panic!(e)
     };
-    let c = a.add(&b);
-    println!("C = ");
-    rusty_sea::print_bigint(&c);
+    print!("{} + {}",&a,&b);
+    let c:rusty_sea::bigint::BigInt = a+b;
+    
+    print!(" = {}", c);
 
-    let d = a & b;
+    // println!("{} + {} = {}", a, b, a*c);
+    // rusty_sea::bigint::utilities::print_bigint(&c);
+
+    // let d = a & b;
+    // println!("Hello {}", d);
+    
 /*
     let mut d = match c {
         Ok(v) => v.add(&b),
@@ -90,4 +95,5 @@ fn main() {
 
 
 // Run testing
+#[cfg(test)]
 pub mod testing;

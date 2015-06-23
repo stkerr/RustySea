@@ -1,4 +1,5 @@
-use rusty_sea::*;
+use rusty_sea::bigint::*;
+use rusty_sea::bigint::utilities::*;
 
 #[test]
 fn basic_negation_test_positive() {
