@@ -1,6 +1,4 @@
-use ::bigint;
 use ::bigint::BigInt;
-use ::bigint::utilities;
 
 use std;
 use std::ops::*;
@@ -9,6 +7,30 @@ impl Add for BigInt {
     type Output = BigInt;
 
     fn add(self, b:BigInt) -> BigInt {
+        return &self + &b;
+    }
+}
+
+impl<'a> Add<&'a BigInt> for BigInt {
+    type Output = BigInt;
+
+    fn add(self, b: &'a BigInt) -> BigInt {
+        return &self + b;
+    }
+}
+
+impl<'a> Add<BigInt> for &'a BigInt {
+    type Output = BigInt;
+
+    fn add(self, b: BigInt) -> BigInt {
+        return self + &b;    
+    }
+}
+
+impl<'a,'b> Add<&'a BigInt> for &'b BigInt {
+    type Output = BigInt;
+
+    fn add(self, b: &'a BigInt) -> BigInt {
         if self.negative && !b.negative {
             let self_copy:BigInt = BigInt { length: self.length, negative: false, data: self.data.clone()};
             let result:BigInt = b.subtract(&self_copy);
@@ -44,12 +66,16 @@ impl Add for BigInt {
         }
 
         // Find the longer integer if it is there
-        let difference = self.length - b.length;
+        let difference_result;
+        match self.length > b.length {
+            true => { difference_result = self.length - b.length; },
+            false => { difference_result = b.length - self.length; },
+        }
         let (longer, starting_index) = match self.length == b.length {
             true => (None, 0),
             false => match self.length > b.length {
-                true => (Some(self), difference),
-                false => (Some(b), -1*difference)
+                true => (Some(self), difference_result),
+                false => (Some(b), difference_result)
             }
         };
 

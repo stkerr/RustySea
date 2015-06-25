@@ -7,6 +7,30 @@ impl Sub for BigInt {
 	type Output = BigInt;
 
 	fn sub(self, b: BigInt) -> BigInt {
+		return &self - &b;
+	}
+}
+
+impl<'a> Sub<&'a BigInt> for BigInt {
+	type Output = BigInt;
+
+	fn sub(self, b:&'a BigInt) -> BigInt {
+		return &self - b;
+	}
+}
+
+impl<'a> Sub<BigInt> for &'a BigInt {
+	type Output = BigInt;
+
+	fn sub(self, b: BigInt) -> BigInt {
+		return self - &b;
+	}
+}
+
+impl<'a,'b> Sub<&'a BigInt> for &'b BigInt {
+	type Output = BigInt;
+
+	fn sub(self, b: &'a BigInt) -> BigInt {
 	    if self.negative && b.negative {
 	        // Subtracting a negative is the same as adding the positive value
 	        let b_copy:BigInt = BigInt { length: b.length, negative: false, data: b.data.clone()};

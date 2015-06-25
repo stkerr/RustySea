@@ -7,8 +7,8 @@ impl Neg for BigInt {
 	type Output = BigInt;
 
 	fn neg(self) -> BigInt {
-		let mut result = self.clone();
-		result.negative = !self.negative;
-		return result;
+		let mut returnable = self.clone();
+		returnable.negative = !returnable.negative;
+		return returnable;
 	}
 }

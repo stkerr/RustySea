@@ -1,6 +1,5 @@
 use ::bigint::BigInt;
 
-use std::fmt;
 use std::fmt::*;
 
 impl Display for BigInt {
@@ -11,9 +10,12 @@ impl Display for BigInt {
 		
 		for i in data_copy {
 			// println!("i: {}", i);
-			f.write_fmt(format_args!("{:x}",i));
+			let result:Result = f.write_fmt(format_args!("{:x}",i));
+			match result {
+				Ok(v) => v,
+				Err(e) => panic!(e)
+			}
 		}
 		return Ok(());
-		// panic!("Nope");
 	}
 }

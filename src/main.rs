@@ -14,10 +14,18 @@ fn main() {
         Ok(v) => v,
         Err(e) => panic!(e)
     };
-    print!("{} + {}",&a,&b);
-    let c:rusty_sea::bigint::BigInt = a+b;
+    println!("{} + {}",&a,&b);
+    let c:rusty_sea::bigint::BigInt = &a+&b;
+    println!("c = {}", c);
+    let d:rusty_sea::bigint::BigInt = &a+c;
+    println!("a = {}", a);
+    let e:rusty_sea::bigint::BigInt = a+&d;
+    println!("d = {}", d);
+    println!("e = {}", e);
+    let f:rusty_sea::bigint::BigInt = e+d;
+    println!("f = {}", f);
     
-    print!(" = {}", c);
+    
 
     // println!("{} + {} = {}", a, b, a*c);
     // rusty_sea::bigint::utilities::print_bigint(&c);
