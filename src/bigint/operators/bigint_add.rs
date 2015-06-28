@@ -54,7 +54,7 @@ impl<'a,'b> Add<&'a BigInt> for &'b BigInt {
 
             // Add the raw values
             let (interim, internal_carry) = ::bigint::utilities::add_with_carry(self.data[i], b.data[i]);
-            let temp_carry:u64= internal_carry + carry;
+            let temp_carry:u64= internal_carry;
 
             // Add the previous carry value
             let (interim, internal_carry) = ::bigint::utilities::add_with_carry(interim, carry);
@@ -82,7 +82,7 @@ impl<'a,'b> Add<&'a BigInt> for &'b BigInt {
         // Add in the longer tail of the two values
         match longer {
             Some(x) => {
-                println!("Unequal sizes, parsing the longer.");
+                // println!("Unequal sizes, parsing the longer.");
                 for i in starting_index..x.length {
                     let (next, next_carry) = ::bigint::utilities::add_with_carry(x.data[i], carry);
                     carry = next_carry;
@@ -91,13 +91,13 @@ impl<'a,'b> Add<&'a BigInt> for &'b BigInt {
                 }
                 carry = 0; // no carry since we just added all the carry positions
             },
-            None => {}
-        }
-         
-        // Add the final carry if there is one
-        if carry > 0 {
-            result.data.push(carry);
-            result.length = result.length + 1;
+            None => {
+                // Add the final carry if there is one
+                if carry > 0 {
+                    result.data.push(carry);
+                    result.length = result.length + 1;
+                }
+            }
         }
         
         return result;

@@ -199,3 +199,52 @@ fn test_basic_add_negative_negative_nocarry() {
     assert!(c.negative == true);
     assert!(c.data[0] == 6);
 }
+
+#[test]
+fn test_add_length_two_integers() {
+    if let Ok(v) = create_bigint_from_string("FFFFFFFFFFFFFFFF") {
+        let a:BigInt = v;
+        if let Ok(v) = create_bigint_from_string("FFFFFFFFFFFFFFFF") {
+            let b:BigInt = v;
+            let c:BigInt = a + b;
+            println!("c: {}", c.data[0]);
+            println!("c: {}", c.data[1]);
+            assert!(c.length == 2);
+            assert!(c.data[0] == 0xFFFFFFFFFFFFFFFE);
+            assert!(c.data[1] == 0x01);
+        } else {
+            panic!("Failed to initialize from string.");
+        }
+    } else {
+        panic!("Failed to initialize from string.");
+    }
+}
+
+#[test]
+fn test_add_length_two_large_integers() {
+    if let Ok(v) = create_bigint_from_string("2fffffffffffffffd") {
+        assert!(v.length == 2);
+        assert!(v.data[0] == 0xfffffffffffffffd);
+        assert!(v.data[1] == 0x2);
+
+        let a:BigInt = v;
+        if let Ok(v) = create_bigint_from_string("3fffffffffffffffc") {
+            assert!(v.length == 2);
+            assert!(v.data[0] == 0xfffffffffffffffc);
+            assert!(v.data[1] == 0x3);
+
+            let b:BigInt = v;
+            let c:BigInt = a + b;
+            println!("c: {}", c);
+            println!("c[0]: {:x}", c.data[0]);
+            println!("c[1]: {:x}", c.data[1]);
+            assert!(c.length == 2);
+            assert!(c.data[0] == 0xfffffffffffffff9);
+            assert!(c.data[1] == 0x06);
+        } else {
+            panic!("Failed to initialize from string.");
+        }
+    } else {
+        panic!("Failed to initialize from string.");
+    }
+}

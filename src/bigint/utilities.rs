@@ -9,12 +9,14 @@ pub fn add_with_carry(a: u64, b:u64) -> (u64, u64) {
     let interim:Option<u64> = a.checked_add(b);
 
     match interim {
-        Some(x) => return (x, 0),
+        Some(x) => {
+            return (x, 0);
+        },
         None => {
-            let low_order:u64 = match a < b {
-                true => a-1,
-                false => b-1
-            };
+            let t1 = 0xFFFFFFFFFFFFFFFF-a;
+            let t2 = 0xFFFFFFFFFFFFFFFF-b;
+            let low_order:u64 = 0xFFFFFFFFFFFFFFFF - t1 - t2 -1;
+            
             return (low_order, 1);
         }
     };
@@ -157,7 +159,7 @@ impl BigInt {
                 // Add the raw values
                 let (interim, internal_borrow, temp_is_negative) = signed_add_with_carry(self.data[i], self.negative, b.data[i], true);
                 let temp_borrow:u64= internal_borrow + borrow;
-                println!("Interim: {} from {} and {}", interim, self.data[i], b.data[i]);
+
                 // Add the previous borrow value
                 let (interim, internal_borrow, temp_is_negative) = signed_add_with_carry(interim, temp_is_negative, temp_borrow, true);
                 borrow = internal_borrow + temp_borrow;
