@@ -110,7 +110,7 @@ impl BigInt {
             if self.negative && b.negative {
                 // We are comparing by absolute value here, but we
                 // have two negative numbers, so flip the sign of the result this case.
-                return !self.compare_ignore_sign(&b);
+                return -1*self.compare_ignore_sign(&b);
             } else {
                 return self.compare_ignore_sign(&b);
             }
@@ -118,160 +118,11 @@ impl BigInt {
     }
 
     pub fn subtract(&self, b: &BigInt) -> BigInt {
-        if self.negative && b.negative {
-            // Subtracting a negative is the same as adding the positive value
-            let b_copy:BigInt = BigInt { length: b.length, negative: false, data: b.data.clone()};
-            return self.add(&b_copy);
-        } else if self.negative && !b.negative {
-            // We are subtracing a positive, but we are already negative, so just add the absolute values
-            // then call it negative
-            let self_copy:BigInt = BigInt { length: self.length, negative: false, data: self.data.clone()};
-            let b_copy:BigInt = BigInt { length: b.length, negative: false, data: b.data.clone()};
-            let mut result:BigInt = self_copy.add(&b_copy);
-            result.negative = true;
-            return result;
-        } else if !self.negative && b.negative {
-            // Subtracting a negative is the same as adding the positive
-            let b_copy:BigInt = BigInt { length: b.length, negative: false, data: b.data.clone()};
-            return self.add(&b_copy);
-        } else if !self.negative && !b.negative {
-            // This is the case we actually need to handle below
-        }
-        
-        let mut result:BigInt = BigInt {length: 0, negative: false, data: vec![] };
-        let comparison:i8 = self.compare(b);
-
-        if comparison < 0 {
-            // Rather than do the subtraction here, do -1*(b-self). Since b>self, we
-            // know we will have a negative result.
-            result = b.subtract(&self);
-            result.negative = true;
-            return result;
-        } else if comparison > 0 {
-            // We are subtracting something smaller than ourself, so we will not be negative.
-            // Do the actual subtraction operation here.
-
-            // Add each of the u64 for a&b until there aren't anymore
-            let mut borrow:u64 = 0;
-            // let mut temp_is_negative:bool = false;
-            for i in 0..std::cmp::min(self.length, b.length) {
-
-                // Add the raw values
-                let (interim, internal_borrow, temp_is_negative) = signed_add_with_carry(self.data[i], self.negative, b.data[i], true);
-                let temp_borrow:u64= internal_borrow + borrow;
-
-                // Add the previous borrow value
-                let (interim, internal_borrow, temp_is_negative) = signed_add_with_carry(interim, temp_is_negative, temp_borrow, true);
-                borrow = internal_borrow + temp_borrow;
-
-                // Add the digit to the BigInt
-                result.data.push(interim);
-                result.length = result.length + 1;
-            }
-
-            // Find the longer integer if it is there
-            let (longer, starting_index) = match self.length == b.length {
-                true => (None, 0),
-                false => match  self.length > b.length {
-                    true => (Some(self), self.length - b.length),
-                    false => (Some(b), b.length - self.length)
-                }
-            };
-
-            // Add in the longer tail of the two values
-            match longer {
-                Some(x) => {
-                    println!("Unequal sizes, parsing the longer.");
-                    for i in starting_index..x.length {
-                        let (next, next_borrow) = add_with_carry(x.data[i], borrow);
-                        borrow = next_borrow;
-                        result.data.push(next);
-                        result.length = result.length + 1;
-                    }
-                },
-                None => println!("Same length.")
-            }
-             
-            // Subtract the final borrow if there is one
-            if borrow > 0 {
-                result.data.push(borrow);
-                result.length = result.length + 1;
-            }
-
-            return result;
-
-        } else {
-            // We are subtracting the same value as ourself, so just return 0.
-            return BigInt {length: 1, negative: false, data: vec![0]};
-        }
+        return self - b;
     }
 
     pub fn add(&self, b: &BigInt) -> BigInt {
-        if self.negative && !b.negative {
-            let self_copy:BigInt = BigInt { length: self.length, negative: false, data: self.data.clone()};
-            let result:BigInt = b.subtract(&self_copy);
-            return result;
-        } else if !self.negative && b.negative {
-            let b_copy:BigInt = BigInt { length: b.length, negative: false, data: b.data.clone()};
-            let result:BigInt = self.subtract(&b_copy);
-            return result;
-        }
-
-        let mut result:BigInt = BigInt {length: 0, negative: false, data: vec![] };
-        if self.negative && b.negative {
-            // Adding two negatives is the same as a normal add, just with the resulting sign
-            // as negative
-            result.negative = true;
-        }
-
-        // Add each of the u64 for a&b until there aren't anymore
-        let mut carry:u64 = 0;
-        for i in 0..std::cmp::min(self.length, b.length) {
-
-            // Add the raw values
-            let (interim, internal_carry) = add_with_carry(self.data[i], b.data[i]);
-            let temp_carry:u64= internal_carry + carry;
-
-            // Add the previous carry value
-            let (interim, internal_carry) = add_with_carry(interim, carry);
-            carry = internal_carry + temp_carry;
-
-            // Add the digit to the BigInt
-            result.data.push(interim);
-            result.length = result.length + 1;
-        }
-
-        // Find the longer integer if it is there
-        let (longer, starting_index) = match self.length == b.length {
-            true => (None, 0),
-            false => match  self.length > b.length {
-                true => (Some(self), self.length - b.length),
-                false => (Some(b), b.length - self.length)
-            }
-        };
-
-        // Add in the longer tail of the two values
-        match longer {
-            Some(x) => {
-                println!("Unequal sizes, parsing the longer.");
-                for i in starting_index..x.length {
-                    let (next, next_carry) = add_with_carry(x.data[i], carry);
-                    carry = next_carry;
-                    result.data.push(next);
-                    result.length = result.length + 1;
-                }
-                carry = 0; // no carry since we just added all the carry positions
-            },
-            None => println!("Same length.")
-        }
-         
-        // Add the final carry if there is one
-        if carry > 0 {
-            result.data.push(carry);
-            result.length = result.length + 1;
-        }
-        
-        return result;
+        return self + b;
     }
 }
 

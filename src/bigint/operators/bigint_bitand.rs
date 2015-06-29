@@ -41,16 +41,11 @@ impl<'a,'b> BitAnd<&'a BigInt> for &'b BigInt {
             result.length = result.length + 1;
         }
 
-        let difference_result;
-        match self.length > b.length {
-            true => { difference_result = self.length - b.length; },
-            false => { difference_result = b.length - self.length; },
-        }
         let (longer, starting_index) = match self.length == b.length {
             true => (None, 0),
             false => match self.length > b.length {
-                true => (Some(self), difference_result),
-                false => (Some(b), difference_result)
+                true => (Some(self), b.length),
+                false => (Some(b), self.length)
             }
         };
 
