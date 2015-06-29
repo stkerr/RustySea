@@ -20,3 +20,13 @@ fn basic_negation_test_negative() {
 		panic!("Failed to convert from string!");
 	}
 }
+
+#[test]
+fn basic_negation_large_integer() {
+	assert!((-create_bigint_from_string("-fff33ff33fff3fddd").unwrap()).compare(&create_bigint_from_string("fff33ff33fff3fddd").unwrap()) == 0);
+}
+
+#[test]
+fn basic_negation_large_integer_backward() {
+	assert!((-create_bigint_from_string("fff33ff33fff3fddd").unwrap()).compare(&create_bigint_from_string("-fff33ff33fff3fddd").unwrap()) == 0);
+}
