@@ -14,7 +14,7 @@ fn test_operator_add_positive_positive() {
             panic!("Failed to initialize from string.");
         }
     } else {
-            panic!("Failed to initialize from string.");
+        panic!("Failed to initialize from string.");
     }
 }
 

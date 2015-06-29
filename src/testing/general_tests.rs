@@ -271,3 +271,116 @@ fn test_basic_sub_negative_negative_nocarry_negativeresult() {
     assert!(c.negative == true);
     assert!(c.data[0] == 1);
 }
+
+#[test]
+fn test_compare() {
+    if let Ok(v) = create_bigint_from_string("5") {
+        let a:BigInt = v;
+        if let Ok(v) = create_bigint_from_string("6") {
+            let b:BigInt = v;
+            assert!(a.compare(&b) == -1);
+        } else {
+            panic!("Failed to initialize from string.");
+        }
+    } else {
+            panic!("Failed to initialize from string.");
+    }
+
+    if let Ok(v) = create_bigint_from_string("6") {
+        let a:BigInt = v;
+        if let Ok(v) = create_bigint_from_string("6") {
+            let b:BigInt = v;
+            assert!(a.compare(&b) == 0);
+        } else {
+            panic!("Failed to initialize from string.");
+        }
+    } else {
+            panic!("Failed to initialize from string.");
+    }
+
+    if let Ok(v) = create_bigint_from_string("6") {
+        let a:BigInt = v;
+        if let Ok(v) = create_bigint_from_string("5") {
+            let b:BigInt = v;
+            assert!(a.compare(&b) == 1);
+        } else {
+            panic!("Failed to initialize from string.");
+        }
+    } else {
+            panic!("Failed to initialize from string.");
+    }
+
+    if let Ok(v) = create_bigint_from_string("-5") {
+        let a:BigInt = v;
+        if let Ok(v) = create_bigint_from_string("-6") {
+            let b:BigInt = v;
+            assert!(a.compare(&b) == 1);
+        } else {
+            panic!("Failed to initialize from string.");
+        }
+    } else {
+            panic!("Failed to initialize from string.");
+    }
+
+    if let Ok(v) = create_bigint_from_string("-6") {
+        let a:BigInt = v;
+        if let Ok(v) = create_bigint_from_string("-6") {
+            let b:BigInt = v;
+            assert!(a.compare(&b) == 0);
+        } else {
+            panic!("Failed to initialize from string.");
+        }
+    } else {
+            panic!("Failed to initialize from string.");
+    }
+
+    if let Ok(v) = create_bigint_from_string("-6") {
+        let a:BigInt = v;
+        if let Ok(v) = create_bigint_from_string("-5") {
+            let b:BigInt = v;
+            assert!(a.compare(&b) == -1);
+        } else {
+            panic!("Failed to initialize from string.");
+        }
+    } else {
+            panic!("Failed to initialize from string.");
+    }
+
+    if let Ok(v) = create_bigint_from_string("5") {
+        let a:BigInt = v;
+        if let Ok(v) = create_bigint_from_string("-6") {
+            let b:BigInt = v;
+            assert!(a.compare(&b) == 1);
+        } else {
+            panic!("Failed to initialize from string.");
+        }
+    } else {
+            panic!("Failed to initialize from string.");
+    }
+
+    if let Ok(v) = create_bigint_from_string("6") {
+        let a:BigInt = v;
+        if let Ok(v) = create_bigint_from_string("-6") {
+            let b:BigInt = v;
+            assert!(a.compare(&b) == 1);
+        } else {
+            panic!("Failed to initialize from string.");
+        }
+    } else {
+            panic!("Failed to initialize from string.");
+    }
+
+    if let Ok(v) = create_bigint_from_string("6") {
+        let a:BigInt = v;
+        if let Ok(v) = create_bigint_from_string("-5") {
+            let b:BigInt = v;
+            assert!(a.compare(&b) == 1);
+        } else {
+            panic!("Failed to initialize from string.");
+        }
+    } else {
+            panic!("Failed to initialize from string.");
+    }
+
+
+}
