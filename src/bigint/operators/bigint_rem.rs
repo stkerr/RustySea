@@ -6,7 +6,7 @@ impl Rem for BigInt {
     type Output = BigInt;
 
     fn rem(self, b:BigInt) -> BigInt {
-        return &self & &b;
+        return &self % &b;
     }
 }
 
@@ -14,7 +14,7 @@ impl<'a> Rem<&'a BigInt> for BigInt {
     type Output = BigInt;
 
     fn rem(self, b:&'a BigInt) -> BigInt {
-        return &self & b;
+        return &self % b;
     }
 }
 
@@ -22,7 +22,7 @@ impl<'a> Rem<BigInt> for &'a BigInt {
     type Output = BigInt;
 
     fn rem(self, b: BigInt) -> BigInt {
-        return self & &b;
+        return self % &b;
     }
 }
 
