@@ -4,35 +4,35 @@ use std;
 use std::ops::*;
 
 impl BitOr for BigInt {
-	type Output = BigInt;
+    type Output = BigInt;
 
-	fn bitor(self, b:BigInt) -> BigInt {
-		return &self | &b;
-	}
+    fn bitor(self, b:BigInt) -> BigInt {
+        return &self | &b;
+    }
 }
 
 impl<'a> BitOr<&'a BigInt> for BigInt {
-	type Output = BigInt;
+    type Output = BigInt;
 
-	fn bitor(self, b:&'a BigInt) -> BigInt {
-		return &self | b;
-	}
+    fn bitor(self, b:&'a BigInt) -> BigInt {
+        return &self | b;
+    }
 }
 
 impl<'a> BitOr<BigInt> for &'a BigInt {
-	type Output = BigInt;
+    type Output = BigInt;
 
-	fn bitor(self, b: BigInt) -> BigInt {
-		return self | &b;
-	}
+    fn bitor(self, b: BigInt) -> BigInt {
+        return self | &b;
+    }
 }
 
 impl<'a,'b> BitOr<&'a BigInt> for &'b BigInt {
-	type Output = BigInt;
+    type Output = BigInt;
 
-	fn bitor(self, b: &'a BigInt) -> BigInt {
-		// Add each of the u64 for a&b until there aren't anymore
-		let mut result:BigInt = BigInt {length: 0, negative: false, data: vec![] };
+    fn bitor(self, b: &'a BigInt) -> BigInt {
+        // Add each of the u64 for a&b until there aren't anymore
+        let mut result:BigInt = BigInt {length: 0, negative: false, data: vec![] };
         for i in 0..std::cmp::min(self.length, b.length) {
 
             // Add the digit to the BigInt
@@ -62,5 +62,5 @@ impl<'a,'b> BitOr<&'a BigInt> for &'b BigInt {
         }
 
         return result;
-	}
+    }
 }

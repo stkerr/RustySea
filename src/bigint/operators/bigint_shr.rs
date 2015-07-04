@@ -4,31 +4,31 @@ use ::bigint::utilities::*;
 use std::ops::*;
 
 impl Shr<BigInt> for BigInt {
-	type Output = BigInt;
+    type Output = BigInt;
 
-	fn shr(self, b:BigInt) -> BigInt {
+    fn shr(self, b:BigInt) -> BigInt {
         if b.negative {
             let mut positive_b = b.clone();
             positive_b.negative = false;
             return self << positive_b;
         }
 
-		let mut remaining:BigInt = b;
-		let sixty_four:BigInt = create_bigint_from_string("40").unwrap();
-		let mut new_data:Vec<u64> = vec![];
-		let mut start_index = self.length;
+        let mut remaining:BigInt = b;
+        let sixty_four:BigInt = create_bigint_from_string("40").unwrap();
+        let mut new_data:Vec<u64> = vec![];
+        let mut start_index = self.length;
 
-		while remaining.compare(&sixty_four) >= 0 {
-			// Just remove the lowest entry
-			println!("Shifting! {}", remaining);
+        while remaining.compare(&sixty_four) >= 0 {
+            // Just remove the lowest entry
+            println!("Shifting! {}", remaining);
 
-			remaining = remaining - sixty_four.clone();
-			start_index -= 1;
-		}
+            remaining = remaining - sixty_four.clone();
+            start_index -= 1;
+        }
 
-		let mut out_shift_part:u64;
-		let mut down_shift_part:u64;
-		let mut previous_out_shift_part:u64 = 0;
+        let mut out_shift_part:u64;
+        let mut down_shift_part:u64;
+        let mut previous_out_shift_part:u64 = 0;
 
         match start_index == 0 {
             true => {
@@ -54,32 +54,32 @@ impl Shr<BigInt> for BigInt {
             }
         }
 
-		let result:BigInt = BigInt {negative: self.negative, data: new_data.clone(), length: new_data.len() };
-		return result;
+        let result:BigInt = BigInt {negative: self.negative, data: new_data.clone(), length: new_data.len() };
+        return result;
 
-	}
+    }
 }
 
 impl Shr<u8> for BigInt {
-	type Output = BigInt;
+    type Output = BigInt;
 
-	fn shr(self, b:u8) -> BigInt {
-		panic!("Right shift by {} (by u8) not implemented.", b)
-	}
+    fn shr(self, b:u8) -> BigInt {
+        panic!("Right shift by {} (by u8) not implemented.", b)
+    }
 }
 
 impl Shr<u16> for BigInt {
-	type Output = BigInt;
+    type Output = BigInt;
 
-	fn shr(self, b:u16) -> BigInt {
-		panic!("Right shift {} (by u16) not implemented.", b)
-	}
+    fn shr(self, b:u16) -> BigInt {
+        panic!("Right shift {} (by u16) not implemented.", b)
+    }
 }
 
 impl Shr<u32> for BigInt {
-	type Output = BigInt;
+    type Output = BigInt;
 
-	fn shr(self, b:u32) -> BigInt {
-		panic!("Right shift by {} (by u32) not implemented.", b)
-	}
+    fn shr(self, b:u32) -> BigInt {
+        panic!("Right shift by {} (by u32) not implemented.", b)
+    }
 }

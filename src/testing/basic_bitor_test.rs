@@ -9,19 +9,19 @@ fn test_operator_bitor() {
         if let Ok(v) = create_bigint_from_string("7") {
             let b:BigInt = v;
             if let Ok(v) = create_bigint_from_string("F") {
-            	let c:BigInt = v;
-            	let d = a | b;
+                let c:BigInt = v;
+                let d = a | b;
                 println!("c: {}", c.data[0]);
                 println!("d: {}", d.data[0]);
                 assert!(c.compare(&d) == 0);
-        	} else {
-        		panic!("Failed to initialize from string.");
-        	}
+            } else {
+                panic!("Failed to initialize from string.");
+            }
         } else {
-    		panic!("Failed to initialize from string.");
-    	}
+            panic!("Failed to initialize from string.");
+        }
     } else {
-    	panic!("Failed to initialize from string.");
+        panic!("Failed to initialize from string.");
     }
 }
 
