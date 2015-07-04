@@ -1,5 +1,4 @@
 use ::bigint::*;
-use std;
 
 // Returns a tuple of (low-order result, carry)
 // where low-order result is a u64 and carry flag is a
@@ -46,41 +45,6 @@ pub fn signed_add_with_carry(a: u64, a_negative: bool, b:u64, b_negative: bool) 
 
 impl BigInt {
 
-    fn left_shift(&self, quantity: &BigInt) -> Result<BigInt, Error> {
-        println!("Shifting:");
-        print_bigint(&self);
-        let mut result:BigInt = BigInt { length: 0, negative:false, data: Vec::new()};
-
-        let mut bit_out = 0;
-        for v in &self.data {
-            println!("Shift Item {}", v);
-            let new_item:u64 = v << 1 | bit_out;
-            bit_out = v | 0x8000000000000000;
-            bit_out = match bit_out {
-                0 => 0,
-                _ => 1
-            };
-            println!("New shift item {}", new_item);
-            result.data.push(new_item);
-            result.length = result.length + 1;
-        }
-        return Err(Error::NotImplementedError);
-    }
-
-    fn div(&self, b: &BigInt) -> Result<(BigInt, BigInt), Error> {
-        return Err(Error::NotImplementedError);
-    }
-
-    fn mult(&self, b: &BigInt) -> Result<BigInt, Error> {
-        // TODO: Make this implementation faster using Karatsuba
-        // multiplication or almost any other algorithm.
-
-
-        // We can write A*B=C as a series of doubles and adds
-        // of A with itself.
-        return Err(Error::NotImplementedError);
-    }
-    
     // Returns -1 if self is smaller than b, 0 if self==b, 1 is self is greater than b.
     // This comparison is done ignoring sign. 
     fn compare_ignore_sign(&self, b: &BigInt) -> i8 {

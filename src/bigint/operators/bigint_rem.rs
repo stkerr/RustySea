@@ -1,6 +1,5 @@
 use ::bigint::BigInt;
 
-use std;
 use std::ops::*;
 
 impl Rem for BigInt {
@@ -31,6 +30,6 @@ impl<'a,'b> Rem<&'a BigInt> for &'b BigInt {
 	type Output = BigInt;
 
 	fn rem(self, b: &'a BigInt) -> BigInt {
-		panic!("Rem not implemented.");
+		panic!("Rem not implemented for {} % {}", self, b);
 	}
 }

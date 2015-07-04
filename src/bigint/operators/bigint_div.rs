@@ -1,6 +1,5 @@
 use ::bigint::BigInt;
 
-use std;
 use std::ops::*;
 
 impl Div for BigInt {
@@ -31,6 +30,6 @@ impl<'a,'b> Div<&'a BigInt> for &'b BigInt {
 	type Output = BigInt;
 
 	fn div(self, b: &'a BigInt) -> BigInt {
-		panic!("Div not implemented.");
+		panic!("Div not implemented for {} / {}.", self, b);
 	}
 }

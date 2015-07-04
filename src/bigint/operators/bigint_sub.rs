@@ -66,7 +66,6 @@ impl<'a,'b> Sub<&'a BigInt> for &'b BigInt {
 
 	        // Add each of the u64 for a&b until there aren't anymore
 	        let mut borrow:u64 = 0;
-	        // let mut temp_is_negative:bool = false;
 	        for i in 0..std::cmp::min(self.length, b.length) {
 
 	            // Add the raw values
@@ -74,7 +73,7 @@ impl<'a,'b> Sub<&'a BigInt> for &'b BigInt {
 	            let temp_borrow:u64= internal_borrow + borrow;
 	            println!("Interim: {} from {} and {}", interim, self.data[i], b.data[i]);
 	            // Add the previous borrow value
-	            let (interim, internal_borrow, temp_is_negative) = ::bigint::utilities::signed_add_with_carry(interim, temp_is_negative, temp_borrow, true);
+	            let (interim, internal_borrow, _) = ::bigint::utilities::signed_add_with_carry(interim, temp_is_negative, temp_borrow, true);
 	            borrow = internal_borrow + temp_borrow;
 
 	            // Add the digit to the BigInt

@@ -1,7 +1,6 @@
 use ::bigint::*;
 use ::bigint::utilities::*;
 
-use std;
 use std::ops::*;
 
 impl Shl<BigInt> for BigInt {
@@ -15,7 +14,6 @@ impl Shl<BigInt> for BigInt {
 		}
 
 		let mut remaining:BigInt = b;
-		let zero:BigInt = create_bigint_from_string("0").unwrap();
 		let sixty_four:BigInt = create_bigint_from_string("40").unwrap();
 		let mut new_data:Vec<u64> = vec![];
 
@@ -36,9 +34,13 @@ impl Shl<BigInt> for BigInt {
 
 		for i in 0..self.length {
 			let mut mask:u64 = !0;
-			for j in 0..(64-remaining.data[0]) {
+
+            let mut j = 0;
+			while j < (64-remaining.data[0]) {
 				mask = mask << 1 & (!1);
+				j += 1;
 			}
+
 			out_shift_part = (self.data[i] & (mask)) >> remaining.data[0];
 			up_shift_part = (self.data[i] & (!mask)) << remaining.data[0];
 			println!("data: {:x}", self.data[i]);
@@ -68,7 +70,7 @@ impl Shl<u8> for BigInt {
 	type Output = BigInt;
 
 	fn shl(self, b:u8) -> BigInt {
-		panic!("Left shift (by u8) not implemented.")
+		panic!("Left shift by {} (by u8) not implemented.", b)
 	}
 }
 
@@ -76,7 +78,7 @@ impl Shl<u16> for BigInt {
 	type Output = BigInt;
 
 	fn shl(self, b:u16) -> BigInt {
-		panic!("Left shift (by u16) not implemented.")
+		panic!("Left shift by {} (by u16) not implemented.", b)
 	}
 }
 
@@ -84,6 +86,6 @@ impl Shl<u32> for BigInt {
 	type Output = BigInt;
 
 	fn shl(self, b:u32) -> BigInt {
-		panic!("Left shift (by u32) not implemented.")
+		panic!("Left shift by {} (by u32) not implemented.", b)
 	}
 }

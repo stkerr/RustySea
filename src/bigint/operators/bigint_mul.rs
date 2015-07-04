@@ -1,6 +1,5 @@
 use ::bigint::BigInt;
 
-use std;
 use std::ops::*;
 
 impl Mul for BigInt {
@@ -31,6 +30,6 @@ impl<'a,'b> Mul<&'a BigInt> for &'b BigInt {
 	type Output = BigInt;
 
 	fn mul(self, b: &'a BigInt) -> BigInt {
-		panic!("Mul not implemented.");
+		panic!("Mul not implemented for {} * {}.", self, b);
 	}
 }

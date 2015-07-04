@@ -84,7 +84,6 @@ impl<'a,'b> Add<&'a BigInt> for &'b BigInt {
                     result.data.push(next);
                     result.length = result.length + 1;
                 }
-                carry = 0; // no carry since we just added all the carry positions
             },
             None => {
                 // Add the final carry if there is one

@@ -6,3 +6,5 @@ rusty_sea.rsproj
 Cargo.lock
 src/bigint/tmp*
 src/bigint/operators/tmp*
+*un~
+*swp

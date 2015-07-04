@@ -1,8 +1,5 @@
 use ::bigint::BigInt;
 
-use std;
-use std::ops::*;
-
 impl Clone for BigInt {
 	fn clone(&self) -> BigInt {
 		let result:BigInt = BigInt {
