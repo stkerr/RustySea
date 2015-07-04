@@ -10,19 +10,16 @@ impl Shl<BigInt> for BigInt {
 		if b.negative {
 			let mut positive_b = b.clone();
 			positive_b.negative = false;
-			return self >> (positive_b);
+			return self >> positive_b;
 		}
 
 		let mut remaining:BigInt = b;
 		let sixty_four:BigInt = create_bigint_from_string("40").unwrap();
 		let mut new_data:Vec<u64> = vec![];
 
-		println!("Remaining: {}", remaining.data[0]);
-		println!("{}", remaining.compare(&sixty_four));
 		while remaining.compare(&sixty_four) >= 0 {
 			// Just append another zero
 			new_data.push(0);
-			println!("Shifting! {}", remaining);
 
 			remaining = remaining - sixty_four.clone();
 		}
@@ -58,8 +55,6 @@ impl Shl<BigInt> for BigInt {
 			println!("new_data[{:x}]: {:x}", d, new_data[d]);	
 		}
 		
-		
-
 		let result:BigInt = BigInt {negative: self.negative, data: new_data.clone(), length: new_data.len() };
 		println!("Result: {}", result);
 		return result;

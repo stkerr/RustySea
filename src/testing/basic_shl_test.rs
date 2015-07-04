@@ -11,7 +11,6 @@ fn basic_shl_test_most_basic() {
 }
 
 #[test]
-#[should_panic]
 fn basic_shl_test_negative_shift() {
 	let a:BigInt = create_bigint_from_string("1").unwrap();
 	let b:BigInt = create_bigint_from_string("-1").unwrap();
