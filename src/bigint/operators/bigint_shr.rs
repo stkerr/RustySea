@@ -41,28 +41,20 @@ impl<'a,'b> Shr<&'a BigInt> for &'b BigInt {
         let sixty_four:BigInt = create_bigint_from_string("0x40").unwrap();
         let mut new_data:Vec<u64> = vec![];
         let mut start_index = self.length;
-        println!("Start index: {}", start_index);
 
         while remaining.compare(&sixty_four) >= 0 {
             // Just remove the lowest entry
-            println!("Shifting! {}", remaining);
 
-            remaining = remaining - sixty_four.clone();
+            remaining = remaining - &sixty_four;
             start_index -= 1;
         }
-        println!("Start index: {}", start_index);
 
         let mut out_shift_part:u64;
         let mut down_shift_part:u64;
         let mut previous_out_shift_part:u64 = 0;
-        for i in 0..self.length{
-            println!("{}:{:x}", i,(self.data[i]));
-        }
 
-        let mut remove_zero:bool = false;
         match start_index == 0 {
             true => {
-                new_data.push(0);
             },
             false => {
                 match remaining.data[0] == 0 {
@@ -75,37 +67,25 @@ impl<'a,'b> Shr<&'a BigInt> for &'b BigInt {
                                 mask = mask << 1 & (!1);
                                 j += 1;
                             }
-                            println!("Shift mask: {:x}", mask);
-                            println!("Remaining: {}", remaining);
-                            println!("Data {:x}", i);
                             out_shift_part = (i & (!mask)) << (64-remaining.data[0]); 
                             down_shift_part = (i & (mask)) >> (remaining.data[0]);
-                            println!("Previous out part: {:x}", previous_out_shift_part);
-                            println!("Out part: {:x}\nDown part: {:x}", out_shift_part, down_shift_part);
-                            
-                            println!("Inserting {:x}", previous_out_shift_part | down_shift_part);
 
                             new_data.insert(0, previous_out_shift_part | down_shift_part);
                             previous_out_shift_part = out_shift_part;
-
-                            match previous_out_shift_part | down_shift_part == 0 {
-                                true => { remove_zero = true; }
-                                false => { remove_zero = false; }
-                            }
                         }
                     },
                     true => {
-                        for i in start_index..self.length {
-                            println!("Inserting {}", i);
-                            new_data.push(self.data[i]);
+                        for i in 0..start_index {
+                            new_data.insert(0, self.data[self.length-i-1]);
+
                         }
+
                     }
                 }
             }
         }
-        println!("Start index: {}", start_index);
 
-        if remove_zero {
+        while new_data.len() > 0 && new_data[new_data.len()-1] == 0 {
             new_data.pop();
         }
 
@@ -114,7 +94,6 @@ impl<'a,'b> Shr<&'a BigInt> for &'b BigInt {
         } 
 
         let result:BigInt = BigInt {negative: self.negative, data: new_data.clone(), length: new_data.len() };
-        println!("Result: {}", result);
         return result;
 
     }

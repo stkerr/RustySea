@@ -47,16 +47,15 @@ impl<'a,'b> Rem<&'a BigInt> for &'b BigInt {
             while self_clone.compare(&b) > 0 {
                 prev_self_clone = self_clone.clone();
 
-                println!("Iterated. {} ({}) > {}", self_clone, prev_self_clone, b);
                 self_clone = &self_clone >> &one;
-                if count == 100 {
-                    panic!("Done");
-                }
                 count = count + 1;
             }
-
+            println!("prev_self_clone: {}", prev_self_clone);
+            println!("b: {}", b);
+            println!("prev_self_clone ? b: {}", prev_self_clone.compare(&b));
             while prev_self_clone.compare(&b) >= 0 {
                 prev_self_clone = &prev_self_clone - b;
+                println!("After clone shift, result {}", prev_self_clone);
             }
             println!("After clone shift, result {}", prev_self_clone);
             return prev_self_clone;

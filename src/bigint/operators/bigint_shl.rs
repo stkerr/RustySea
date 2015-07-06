@@ -48,10 +48,9 @@ impl<'a,'b> Shl<&'a BigInt> for &'b BigInt {
             remaining = remaining - sixty_four.clone();
         }
 
-        println!("Remaining: {}", remaining.data[0]);
         
         let mut out_shift_part:u64 = 0;
-        let mut up_shift_part:u64 = 0;
+        let mut up_shift_part:u64;
         let mut previous_out_shift_part:u64 = 0;
 
         match remaining.data[0] == 0 {
@@ -66,23 +65,10 @@ impl<'a,'b> Shl<&'a BigInt> for &'b BigInt {
                         j += 1;
                     }
 
-                    println!("Mask {:x}", mask);
-                    println!("Data: {:x}", self.data[i]);
-
                     out_shift_part = (self.data[i] & (!mask)) >> (64 - remaining.data[0]);
-                    println!("Out shift {:x}", out_shift_part);
 
                     up_shift_part = (self.data[i] & (mask)) << (remaining.data[0]);
-                    println!("Up shift {:x}", up_shift_part);
 
-                    println!("data: {:x}", self.data[i]);
-                    println!("mask: {:x}\n!mask: {:x}", mask, !mask);
-                    println!("previous_out_shift_part: {:x}", previous_out_shift_part);
-                    println!("out_shift_part: {:x}", out_shift_part);
-                    println!("up_shift_part: {:x}", up_shift_part);
-                    println!("i: {:x}", self.data[i]);
-
-                    println!("Inserting {:x}", previous_out_shift_part | up_shift_part);
                     new_data.push(previous_out_shift_part | up_shift_part);
 
                     previous_out_shift_part = out_shift_part;
@@ -103,12 +89,8 @@ impl<'a,'b> Shl<&'a BigInt> for &'b BigInt {
         if new_data.len() == 0 {
             new_data.push(0);
         }
-        for d in 0..new_data.len() {
-            println!("new_data[{:x}]: {:x}", d, new_data[d]);   
-        }
         
         let result:BigInt = BigInt {negative: self.negative, data: new_data.clone(), length: new_data.len() };
-        println!("Result: {}", result);
         return result;
     }
 }
