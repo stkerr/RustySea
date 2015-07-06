@@ -4,11 +4,11 @@ use rusty_sea::bigint::utilities::*;
 
 #[test]
 fn test_operator_bitor() {
-    if let Ok(v) = create_bigint_from_string("8") {
+    if let Ok(v) = create_bigint_from_string("0x8") {
         let a:BigInt = v;
-        if let Ok(v) = create_bigint_from_string("7") {
+        if let Ok(v) = create_bigint_from_string("0x7") {
             let b:BigInt = v;
-            if let Ok(v) = create_bigint_from_string("F") {
+            if let Ok(v) = create_bigint_from_string("0xF") {
                 let c:BigInt = v;
                 let d = a | b;
                 println!("c: {}", c.data[0]);
@@ -27,11 +27,11 @@ fn test_operator_bitor() {
 
 #[test]
 fn test_operator_bitor_unequallengths() {
-    if let Ok(v) = create_bigint_from_string("8007") {
+    if let Ok(v) = create_bigint_from_string("0x8007") {
         let a:BigInt = v;
-        if let Ok(v) = create_bigint_from_string("7") {
+        if let Ok(v) = create_bigint_from_string("0x7") {
             let b:BigInt = v;
-            if let Ok(v) = create_bigint_from_string("8007") {
+            if let Ok(v) = create_bigint_from_string("0x8007") {
                 let c:BigInt = v;
                 let d = a | b;
                 println!("c: {}", c.data[0]);
@@ -50,11 +50,11 @@ fn test_operator_bitor_unequallengths() {
 
 #[test]
 fn test_operator_bitor_length2() {
-    if let Ok(v) = create_bigint_from_string("FFFFFFFFFFFFFFFFFFFF") {
+    if let Ok(v) = create_bigint_from_string("0xFFFFFFFFFFFFFFFFFFFF") {
         let a:BigInt = v;
-        if let Ok(v) = create_bigint_from_string("F0F0F0F0F0F0F0F0F0F0") {
+        if let Ok(v) = create_bigint_from_string("0xF0F0F0F0F0F0F0F0F0F0") {
             let b:BigInt = v;
-            if let Ok(v) = create_bigint_from_string("FFFFFFFFFFFFFFFFFFFF") {
+            if let Ok(v) = create_bigint_from_string("0xFFFFFFFFFFFFFFFFFFFF") {
                 let c:BigInt = v;
                 let d = a | b;
                 println!("c[0]: {}", c.data[0]);
@@ -76,13 +76,13 @@ fn test_operator_bitor_length2() {
 
 #[test]
 fn test_operator_bitor_length2_unequallengths() {
-    if let Ok(v) = create_bigint_from_string("0F0F0F0F0F0F0F0F0F0FFFFFFFFFFFFFFFFFFFFF") {
+    if let Ok(v) = create_bigint_from_string("0x0F0F0F0F0F0F0F0F0F0FFFFFFFFFFFFFFFFFFFFF") {
         let a:BigInt = v;
         print_bigint(&a);
-        if let Ok(v) = create_bigint_from_string("F4FFF0F0F0F0F0F0F0F0") {
+        if let Ok(v) = create_bigint_from_string("0xF4FFF0F0F0F0F0F0F0F0") {
             let b:BigInt = v;
             print_bigint(&b);
-            if let Ok(v) = create_bigint_from_string("0F0F0F0F0F0F0F0F0F0FFFFFFFFFFFFFFFFFFFFF") {
+            if let Ok(v) = create_bigint_from_string("0x0F0F0F0F0F0F0F0F0F0FFFFFFFFFFFFFFFFFFFFF") {
                 let c:BigInt = v;
                 let d = a | b;
                 println!("c[0]: {:16x}", c.data[0]);

@@ -71,7 +71,6 @@ impl<'a,'b> Sub<&'a BigInt> for &'b BigInt {
                 // Add the raw values
                 let (interim, internal_borrow, temp_is_negative) = ::bigint::utilities::signed_add_with_carry(self.data[i], self.negative, b.data[i], true);
                 let temp_borrow:u64= internal_borrow + borrow;
-                println!("Interim: {} from {} and {}", interim, self.data[i], b.data[i]);
                 // Add the previous borrow value
                 let (interim, internal_borrow, _) = ::bigint::utilities::signed_add_with_carry(interim, temp_is_negative, temp_borrow, true);
                 borrow = internal_borrow + temp_borrow;

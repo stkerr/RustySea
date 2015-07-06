@@ -130,6 +130,16 @@ pub fn create_bigint_from_string(val: &str) -> Result<BigInt, Error> {
         val_vec.remove(0);
     }
 
+    // Process a leading 0x if there is one
+    if val_vec.get(0) == Some(&'0') && val_vec.get(1) == Some(&'x') {
+        val_vec.remove(0);
+        val_vec.remove(0);
+    } else {
+        println!("Value was {}", val);
+        println!("Got {:?} and {:?}", val_vec.get(0), val_vec.get(1));
+        panic!("Decimal string mode not supported.");
+    }
+
     // Strip the leading zeros
     while val_vec.len() > 1 && val_vec.get(0) == Some(&'0') {
         val_vec.remove(0);

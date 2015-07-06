@@ -4,9 +4,9 @@ use rusty_sea::bigint::utilities::*;
 
 #[test]
 fn test_operator_sub_positive_positive_positiveresult() {
-    if let Ok(v) = create_bigint_from_string("7") {
+    if let Ok(v) = create_bigint_from_string("0x7") {
         let a:BigInt = v;
-        if let Ok(v) = create_bigint_from_string("6") {
+        if let Ok(v) = create_bigint_from_string("0x6") {
             let b:BigInt = v;
             let c = a - b;
             assert!(c.data[0] == 1);
@@ -21,9 +21,9 @@ fn test_operator_sub_positive_positive_positiveresult() {
 
 #[test]
 fn test_operator_sub_positive_positive_negativeresult() {
-    if let Ok(v) = create_bigint_from_string("5") {
+    if let Ok(v) = create_bigint_from_string("0x5") {
         let a:BigInt = v;
-        if let Ok(v) = create_bigint_from_string("6") {
+        if let Ok(v) = create_bigint_from_string("0x6") {
             let b:BigInt = v;
             let c = a - b;
             assert!(c.data[0] == 1);
@@ -38,9 +38,9 @@ fn test_operator_sub_positive_positive_negativeresult() {
 
 #[test]
 fn test_operator_sub_positive_negative() {
-    if let Ok(v) = create_bigint_from_string("5") {
+    if let Ok(v) = create_bigint_from_string("0x5") {
         let a:BigInt = v;
-        if let Ok(v) = create_bigint_from_string("-6") {
+        if let Ok(v) = create_bigint_from_string("-0x6") {
             let b:BigInt = v;
             let c = a - b;
             assert!(c.data[0] == 11);
@@ -55,9 +55,9 @@ fn test_operator_sub_positive_negative() {
 
 #[test]
 fn test_operator_sub_negative_positive() {
-    if let Ok(v) = create_bigint_from_string("-5") {
+    if let Ok(v) = create_bigint_from_string("-0x5") {
         let a:BigInt = v;
-        if let Ok(v) = create_bigint_from_string("6") {
+        if let Ok(v) = create_bigint_from_string("0x6") {
             let b:BigInt = v;
             let c = a - b;
             assert!(c.data[0] == 11);
@@ -72,9 +72,9 @@ fn test_operator_sub_negative_positive() {
 
 #[test]
 fn test_operator_sub_negative_negative_positiveresult() {
-    if let Ok(v) = create_bigint_from_string("-5") {
+    if let Ok(v) = create_bigint_from_string("-0x5") {
         let a:BigInt = v;
-        if let Ok(v) = create_bigint_from_string("-6") {
+        if let Ok(v) = create_bigint_from_string("-0x6") {
             let b:BigInt = v;
             let c = a - b;
             assert!(c.data[0] == 1);
@@ -89,9 +89,9 @@ fn test_operator_sub_negative_negative_positiveresult() {
 
 #[test]
 fn test_operator_sub_negative_negative_negativeresult() {
-    if let Ok(v) = create_bigint_from_string("-5") {
+    if let Ok(v) = create_bigint_from_string("-0x5") {
         let a:BigInt = v;
-        if let Ok(v) = create_bigint_from_string("-3") {
+        if let Ok(v) = create_bigint_from_string("-0x3") {
             let b:BigInt = v;
             let c = a - b;
             assert!(c.data[0] == 2);
