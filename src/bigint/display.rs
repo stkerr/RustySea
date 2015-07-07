@@ -7,7 +7,15 @@ impl Display for BigInt {
     fn fmt(&self, f: &mut Formatter) -> Result {
         let mut data_copy:Vec<u64> = self.data.clone();
         data_copy.reverse();
-        
+ 
+        if self.negative {
+            let result:Result = f.write_fmt(format_args!("-"));
+            match result {
+                Ok(v) => v,
+                Err(e) => panic!(e)
+            }
+        }
+
         let mut result:Result = f.write_fmt(format_args!("0x"));
         match result {
             Ok(v) => v,
