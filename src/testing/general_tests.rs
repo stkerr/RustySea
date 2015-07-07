@@ -8,7 +8,6 @@ fn test_string_parsing() {
     a = create_bigint_from_string("0x3");
     match a {
         Ok(v) => {
-            assert!(v.length == 1);
             assert!(v.data[0] == 3);
             assert!(v.negative == false);
         }
@@ -18,7 +17,6 @@ fn test_string_parsing() {
     a = create_bigint_from_string("-0x3");
     match a {
         Ok(v) => {
-            assert!(v.length == 1);
             assert!(v.data[0] == 3);
             assert!(v.negative == true);
         }
@@ -31,7 +29,6 @@ fn test_string_parsing_two_characters() {
     let a:Result<BigInt,Error> = create_bigint_from_string("0x350");
     match a {
         Ok(v) => {
-            assert!(v.length == 1);
             assert!(v.data[0] == 0x350);
             assert!(v.negative == false);
         },
@@ -73,7 +70,6 @@ fn test_string_parsing_zero() {
         Ok(v) => v,
         Err(e) => panic!(e)
     };
-    assert!(a.length == 1);
     assert!(a.data[0] == 0);
     assert!(a.negative == false);
 }
@@ -85,7 +81,6 @@ fn test_string_parsing_negative_zero() {
         Ok(v) => v,
         Err(e) => panic!(e)
     };
-    assert!(a.length == 1);
     assert!(a.data[0] == 0);
     assert!(a.negative == true);
 }
@@ -97,7 +92,6 @@ fn test_string_parsing_leadingzeros() {
         Ok(v) => v,
         Err(e) => panic!(e)
     };
-    assert!(a.length == 1);
     assert!(a.data[0] == 0);
     assert!(a.negative == false);
 
@@ -106,7 +100,6 @@ fn test_string_parsing_leadingzeros() {
         Ok(v) => v,
         Err(e) => panic!(e)
     };
-    assert!(a.length == 1);
     assert!(a.data[0] == 3);
     assert!(a.negative == true);
 
@@ -115,7 +108,6 @@ fn test_string_parsing_leadingzeros() {
         Ok(v) => v,
         Err(e) => panic!(e)
     };
-    assert!(a.length == 1);
     assert!(a.data[0] == 3);
     assert!(a.negative == false);
 }
@@ -127,7 +119,6 @@ fn test_string_parsing_negativezero_length_two() {
         Ok(v) => v,
         Err(e) => panic!(e)
     };
-    assert!(a.length == 1);
     assert!(a.data[0] == 0);
     assert!(a.negative == true);
 }
@@ -139,7 +130,6 @@ fn test_string_parsing_length_two() {
         Ok(v) => v,
         Err(e) => panic!(e)
     };
-    assert!(a.length == 2);
     assert!(a.data[0] == 0xFFFFFFFFFFFFFFFF);
     assert!(a.data[1] == 3);
     assert!(a.negative == false);
@@ -149,7 +139,6 @@ fn test_string_parsing_length_two() {
         Ok(v) => v,
         Err(e) => panic!(e)
     };
-    assert!(a.length == 2);
     assert!(a.data[0] == 0xFFFFFFFFFFFFFFFF);
     assert!(a.data[1] == 3);
     assert!(a.negative == true);
@@ -171,7 +160,6 @@ fn test_basic_sub_positive_positive_nocarry_positiveresult() {
         Err(e) => panic!(e)
     };
     let c:BigInt = a.subtract(&b);
-    assert!(c.length == 1);
     assert!(c.negative == false);
     assert!(c.data[0] == 6);
 }
@@ -190,7 +178,6 @@ fn test_basic_sub_positive_positive_nocarry_negativeresult() {
         Err(e) => panic!(e)
     };
     let c:BigInt = a.subtract(&b);
-    assert!(c.length == 1);
     assert!(c.negative == true);
     assert!(c.data[0] == 1);
 }
@@ -210,7 +197,6 @@ fn test_basic_sub_positive_negative_nocarry_positiveresult() {
     };
 
     let c:BigInt = a.subtract(&b);
-    assert!(c.length == 1);
     assert!(c.negative == false);
     assert!(c.data[0] == 10);
 }
@@ -229,7 +215,6 @@ fn test_basic_sub_negative_positive_nocarry() {
         Err(e) => panic!(e)
     };
     let c:BigInt = a.subtract(&b);
-    assert!(c.length == 1);
     assert!(c.negative == true);
     assert!(c.data[0] == 15);
 }    
@@ -248,7 +233,6 @@ fn test_basic_sub_negative_negative_nocarry_positiveresult() {
         Err(e) => panic!(e)
     };
     let c:BigInt = a.subtract(&b);
-    assert!(c.length == 1);
     assert!(c.negative == false);
     assert!(c.data[0] == 1);
 }
@@ -267,7 +251,6 @@ fn test_basic_sub_negative_negative_nocarry_negativeresult() {
         Err(e) => panic!(e)
     };
     let c:BigInt = a.subtract(&b);
-    assert!(c.length == 1);
     assert!(c.negative == true);
     assert!(c.data[0] == 1);
 }

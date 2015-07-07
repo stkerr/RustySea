@@ -32,20 +32,18 @@ impl<'a,'b> BitOr<&'a BigInt> for &'b BigInt {
 
     fn bitor(self, b: &'a BigInt) -> BigInt {
         // Add each of the u64 for a&b until there aren't anymore
-        let mut result:BigInt = BigInt {length: 0, negative: false, data: vec![] };
-        for i in 0..std::cmp::min(self.length, b.length) {
+        let mut result:BigInt = BigInt {negative: false, data: vec![] };
+        for i in 0..std::cmp::min(self.data.len(), b.data.len()) {
 
             // Add the digit to the BigInt
-            println!("self.data[i] | b.data[i]: {:16x}", self.data[i] | b.data[i]);
             result.data.push(self.data[i] | b.data[i]);
-            result.length = result.length + 1;
         }
 
-        let (longer, starting_index) = match self.length == b.length {
+        let (longer, starting_index) = match self.data.len() == b.data.len() {
             true => (None, 0),
-            false => match self.length > b.length {
-                true => (Some(self), b.length),
-                false => (Some(b), self.length)
+            false => match self.data.len() > b.data.len() {
+                true => (Some(self), b.data.len()),
+                false => (Some(b), self.data.len())
             }
         };
 
@@ -53,9 +51,8 @@ impl<'a,'b> BitOr<&'a BigInt> for &'b BigInt {
         match longer {
             Some(x) => {
                 println!("Unequal sizes, parsing the longer.");
-                for i in starting_index..x.length {
+                for i in starting_index..x.data.len() {
                     result.data.push(x.data[i]);
-                    result.length = result.length + 1;
                 }
             },
             None => {}

@@ -59,3 +59,5 @@ fn basic_shl_test_across_boundary_length_three() {
 }
 
 op_test!(shl_block_boundary_shift, "0x8000000000000000" << "0x1" == "0x10000000000000000");
+op_test!(shl_one_across, "0x10" << "0x1" == "0x20");
+

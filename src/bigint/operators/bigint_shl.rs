@@ -56,7 +56,7 @@ impl<'a,'b> Shl<&'a BigInt> for &'b BigInt {
         match remaining.data[0] == 0 {
             false => {
 
-                for i in 0..self.length {
+                for i in 0..self.data.len() {
                     let mut mask:u64 = !0;
 
                     let mut j = 0;
@@ -76,7 +76,7 @@ impl<'a,'b> Shl<&'a BigInt> for &'b BigInt {
             },
             true => {
                 // Just append the old bytes directly
-                for i in 0..self.length {
+                for i in 0..self.data.len() {
                     new_data.push(self.data[i]);
                 }
             }
@@ -90,7 +90,7 @@ impl<'a,'b> Shl<&'a BigInt> for &'b BigInt {
             new_data.push(0);
         }
         
-        let result:BigInt = BigInt {negative: self.negative, data: new_data.clone(), length: new_data.len() };
+        let result:BigInt = BigInt {negative: self.negative, data: new_data.clone() };
         return result;
     }
 }

@@ -33,25 +33,25 @@ impl<'a,'b> Sub<&'a BigInt> for &'b BigInt {
     fn sub(self, b: &'a BigInt) -> BigInt {
         if self.negative && b.negative {
             // Subtracting a negative is the same as adding the positive value
-            let b_copy:BigInt = BigInt { length: b.length, negative: false, data: b.data.clone()};
+            let b_copy:BigInt = BigInt { negative: false, data: b.data.clone()};
             return self + b_copy;
         } else if self.negative && !b.negative {
             // We are subtracing a positive, but we are already negative, so just add the absolute values
             // then call it negative
-            let self_copy:BigInt = BigInt { length: self.length, negative: false, data: self.data.clone()};
-            let b_copy:BigInt = BigInt { length: b.length, negative: false, data: b.data.clone()};
+            let self_copy:BigInt = BigInt { negative: false, data: self.data.clone()};
+            let b_copy:BigInt = BigInt { negative: false, data: b.data.clone()};
             let mut result:BigInt = self_copy + b_copy;
             result.negative = true;
             return result;
         } else if !self.negative && b.negative {
             // Subtracting a negative is the same as adding the positive
-            let b_copy:BigInt = BigInt { length: b.length, negative: false, data: b.data.clone()};
+            let b_copy:BigInt = BigInt { negative: false, data: b.data.clone()};
             return self + b_copy;
         } else if !self.negative && !b.negative {
             // This is the case we actually need to handle below
         }
         
-        let mut result:BigInt = BigInt {length: 0, negative: false, data: vec![] };
+        let mut result:BigInt = BigInt { negative: false, data: vec![] };
         let comparison:i8 = self.compare(&b);
 
         if comparison < 0 {
@@ -66,10 +66,13 @@ impl<'a,'b> Sub<&'a BigInt> for &'b BigInt {
 
             // Add each of the u64 for a&b until there aren't anymore
             let mut borrow:u64 = 0;
-            for i in 0..std::cmp::min(self.length, b.length) {
-
+            println!("Self.negative == {}", self.negative);
+            for i in 0..b.data.len() {
+                println!("self.data: {:x}", self.data[i]);
+                println!("b.data: {:x}", b.data[i]);
                 // Add the raw values
                 let (interim, internal_borrow, temp_is_negative) = ::bigint::utilities::signed_add_with_carry(self.data[i], self.negative, b.data[i], true);
+                println!("interim: {}\ninternal_borrow: {}", interim, internal_borrow);
                 let temp_borrow:u64= internal_borrow + borrow;
                 // Add the previous borrow value
                 let (interim, internal_borrow, _) = ::bigint::utilities::signed_add_with_carry(interim, temp_is_negative, temp_borrow, true);
@@ -77,14 +80,13 @@ impl<'a,'b> Sub<&'a BigInt> for &'b BigInt {
 
                 // Add the digit to the BigInt
                 result.data.push(interim);
-                result.length = result.length + 1;
             }
 
             // Find the longer integer if it is there
-            let difference = self.length - b.length;
-            let (longer, starting_index) = match self.length == b.length {
+            let difference = self.data.len() - b.data.len();
+            let (longer, starting_index) = match self.data.len() == b.data.len() {
                 true => (None, 0),
-                false => match  self.length > b.length {
+                false => match  self.data.len() > b.data.len() {
                     true => (Some(self), difference),
                     false => (Some(b), -1*difference)
                 }
@@ -94,11 +96,11 @@ impl<'a,'b> Sub<&'a BigInt> for &'b BigInt {
             match longer {
                 Some(x) => {
                     println!("Unequal sizes, parsing the longer.");
-                    for i in starting_index..x.length {
+                    println!("{} - {}", self, b);
+                    for i in starting_index..x.data.len() {
                         let (next, next_borrow) = ::bigint::utilities::add_with_carry(x.data[i], borrow);
                         borrow = next_borrow;
                         result.data.push(next);
-                        result.length = result.length + 1;
                     }
                 },
                 None => {}
@@ -107,14 +109,17 @@ impl<'a,'b> Sub<&'a BigInt> for &'b BigInt {
             // Subtract the final borrow if there is one
             if borrow > 0 {
                 result.data.push(borrow);
-                result.length = result.length + 1;
+            }
+
+            while result.data.len() > 0 && result.data[result.data.len()-1] == 0 {
+                result.data.pop();
             }
 
             return result;
 
         } else {
             // We are subtracting the same value as ourself, so just return 0.
-            return BigInt {length: 1, negative: false, data: vec![0]};
+            return BigInt {negative: false, data: vec![0]};
         }
     }
 }

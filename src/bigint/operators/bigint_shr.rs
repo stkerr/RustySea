@@ -40,7 +40,7 @@ impl<'a,'b> Shr<&'a BigInt> for &'b BigInt {
         let mut remaining:BigInt = b.clone();
         let sixty_four:BigInt = create_bigint_from_string("0x40").unwrap();
         let mut new_data:Vec<u64> = vec![];
-        let mut start_index = self.length;
+        let mut start_index = self.data.len();
 
         while remaining.compare(&sixty_four) >= 0 {
             // Just remove the lowest entry
@@ -76,7 +76,7 @@ impl<'a,'b> Shr<&'a BigInt> for &'b BigInt {
                     },
                     true => {
                         for i in 0..start_index {
-                            new_data.insert(0, self.data[self.length-i-1]);
+                            new_data.insert(0, self.data[self.data.len()-i-1]);
 
                         }
 
@@ -93,7 +93,7 @@ impl<'a,'b> Shr<&'a BigInt> for &'b BigInt {
             new_data.push(0);
         } 
 
-        let result:BigInt = BigInt {negative: self.negative, data: new_data.clone(), length: new_data.len() };
+        let result:BigInt = BigInt {negative: self.negative, data: new_data.clone() };
         return result;
 
     }

@@ -14,7 +14,7 @@ pub fn add_with_carry(a: u64, b:u64) -> (u64, u64) {
         None => {
             let t1 = 0xFFFFFFFFFFFFFFFF-a;
             let t2 = 0xFFFFFFFFFFFFFFFF-b;
-            let low_order:u64 = 0xFFFFFFFFFFFFFFFF - t1 - t2 -1;
+            let low_order:u64 = 0xFFFFFFFFFFFFFFFF - t1 - t2 - 1;
             
             return (low_order, 1);
         }
@@ -48,12 +48,12 @@ impl BigInt {
     // Returns -1 if self is smaller than b, 0 if self==b, 1 is self is greater than b.
     // This comparison is done ignoring sign. 
     fn compare_ignore_sign(&self, b: &BigInt) -> i8 {
-        if self.length > b.length {
+        if self.data.len() > b.data.len() {
             return 1;
-        } else if self.length < b.length {
+        } else if self.data.len() < b.data.len() {
             return -1;
         } else {
-            for i in 0..self.data.len() {
+            for i in (0..self.data.len()).rev() {
                 if self.data[i] > b.data[i] {
                     return 1;
                 } else if self.data[i] < b.data[i] {
@@ -91,7 +91,7 @@ impl BigInt {
 }
 
 pub fn print_bigint(val: &BigInt) {
-    println!("Stored values: {} ", val.length);
+    println!("Stored values: {} ", val.data.len());
     println!("Negative: {}", val.negative);
     for i in &val.data {
         println!("Item: {:x}", i);
@@ -174,5 +174,5 @@ pub fn create_bigint_from_string(val: &str) -> Result<BigInt, Error> {
         the_data.push(temp);
     }
 
-    return Ok(BigInt { length:the_data.len(), negative:is_negative, data: the_data});
+    return Ok(BigInt { negative:is_negative, data: the_data});
 }

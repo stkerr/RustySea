@@ -103,3 +103,5 @@ fn test_operator_sub_negative_negative_negativeresult() {
             panic!("Failed to initialize from string.");
     }
 }
+
+op_test!(sub_large_numbers, "0x0000000000000051000000000000030f" - "0x0000010000000000" == "0x50ffffff000000030f");
