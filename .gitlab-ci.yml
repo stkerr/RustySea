@@ -9,6 +9,9 @@ include:
   - template: SAST.gitlab-ci.yml
   - template: Security/Secret-Detection.gitlab-ci.yml
 
+stages:
+  - build
+  - fuzz
 
 # Optional: Pick zero or more services to be used on all builds.
 # Only needed when using a docker container to run your tests in.
@@ -38,4 +41,14 @@ test:cargo:
       - results.xml
     reports:
       junit: results.xml
+
+fuzz_string_parse:
+  extends: .fuzz_base
+  script:
+    - apt-get update -qq && apt-get install -y -qq git make clang cmake
+    - export CC=`which clang`
+    - export CXX=`which clang++`
+    - cargo install cargo-fuzz
+  # - cargo fuzz run fuzz_string_parse -- -runs=0
+    - ./gitlab-cov-fuzz run --regression=$REGRESSION -- ./fuzz/target/x86_64-unknown-linux-gnu/release/fuzz_string_parse
 
