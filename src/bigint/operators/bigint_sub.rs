@@ -83,12 +83,11 @@ impl<'a,'b> Sub<&'a BigInt> for &'b BigInt {
             }
 
             // Find the longer integer if it is there
-            let difference = self.data.len() - b.data.len();
             let (longer, starting_index) = match self.data.len() == b.data.len() {
                 true => (None, 0),
                 false => match  self.data.len() > b.data.len() {
-                    true => (Some(self), difference),
-                    false => (Some(b), -1*difference)
+                    true => (Some(self), self.data.len() - b.data.len()),
+                    false => (Some(b), b.data.len() - self.data.len())
                 }
             };
 
