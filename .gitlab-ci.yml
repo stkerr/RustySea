@@ -13,6 +13,7 @@ include:
 stages:
   - build
   - fuzz
+  - test
 
 # Optional: Pick zero or more services to be used on all builds.
 # Only needed when using a docker container to run your tests in.
