@@ -1,5 +1,5 @@
 [package]
-name = "rustyseas-fuzz"
+name = "rustysea_fuzz"
 version = "0.0.1"
 authors = ["Sam Kerr"]
 publish = false
@@ -7,7 +7,7 @@ publish = false
 [package.metadata]
 cargo-fuzz = true
 
-[dependencies.example-rust]
+[dependencies.rusty_sea]
 path = ".."
 [dependencies.libfuzzer-sys]
 git = "https://github.com/rust-fuzz/libfuzzer-sys.git"
