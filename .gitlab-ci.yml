@@ -16,9 +16,6 @@ stages:
   - fuzz
   - test
 
-before_script:
-  - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
-
 # Optional: Pick zero or more services to be used on all builds.
 # Only needed when using a docker container to run your tests in.
 # Check out: http://docs.gitlab.com/ee/ci/docker/using_docker_images.html#what-is-a-service
@@ -49,7 +46,7 @@ test:cargo:
       junit: results.xml
 
 fuzz_string_parse:
-  image: $CI_REGISTRY/stkerr/rustysea-fuzz:latest
+  image: 'rustlang/rust:nightly'
   extends: .fuzz_base
   script:
     - apt-get update -qq && apt-get install -y -qq git make clang cmake
@@ -59,10 +56,3 @@ fuzz_string_parse:
     - cargo fuzz run fuzz_string_parse -- -runs=0 -error_exitcode=76
     - find . -name fuzz_string_parse
     - ./gitlab-cov-fuzz run --regression=$REGRESSION -- ./fuzz/target/x86_64-unknown-linux-gnu/release/fuzz_string_parse
-
-prep_fuzz_image:
-  stage: image_prep
-  script:
-    - docker build -t $CI_REGISTRY/stkerr/rustysea-fuzz:latest ./fuzz_Dockerfile
-    - docker push registry.gitlab.com/stkerr/rustysea
-
