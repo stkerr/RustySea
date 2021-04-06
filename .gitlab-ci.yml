@@ -45,6 +45,7 @@ test:cargo:
       junit: results.xml
 
 fuzz_string_parse:
+  image: 'rustlang/rust:nightly'
   extends: .fuzz_base
   script:
     - apt-get update -qq && apt-get install -y -qq git make clang cmake
