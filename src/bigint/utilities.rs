@@ -137,7 +137,7 @@ pub fn create_bigint_from_string(val: &str) -> Result<BigInt, Error> {
     } else {
         println!("Value was {}", val);
         println!("Got {:?} and {:?}", val_vec.get(0), val_vec.get(1));
-        if cfg(not(fuzzing)) {
+        if cfg!(not(fuzzing)) {
             panic!("Decimal string mode not supported.");
         }
         else {
