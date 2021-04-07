@@ -55,12 +55,12 @@ impl<'a,'b> Mul<&'a BigInt> for &'b BigInt {
             b_copy = &b_copy >> &one;
         }
         if (self.negative && !b.negative) || (!self.negative && b.negative) {
-            if (self.compare_ignore_sign(zero) == 0) {
+            if (self.compare(zero) == 0) {
                 // Don't return negative 0
                 c.negative = false;
             }
             else {
-                c.negative = true;    
+                c.negative = true;
             }
         } else {
             c.negative = false;
