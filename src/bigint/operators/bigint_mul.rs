@@ -43,6 +43,12 @@ impl<'a,'b> Mul<&'a BigInt> for &'b BigInt {
         return c
         */
         let zero:BigInt  = create_bigint_from_string("0x0").unwrap();
+        
+        if (a.compare(&zero) == 0 || b.compare(&zero)) {
+            // Hardcode multiply by zero
+            return zero.clone();
+        }
+
         let one:BigInt = create_bigint_from_string("0x1").unwrap();
         let mut c:BigInt = zero.clone();
         let mut a_copy:BigInt = self.clone();
@@ -55,13 +61,7 @@ impl<'a,'b> Mul<&'a BigInt> for &'b BigInt {
             b_copy = &b_copy >> &one;
         }
         if (self.negative && !b.negative) || (!self.negative && b.negative) {
-            if (self.compare(&zero) == 0) {
-                // Don't return negative 0
-                c.negative = false;
-            }
-            else {
-                c.negative = true;
-            }
+            c.negative = true;
         } else {
             c.negative = false;
         }
