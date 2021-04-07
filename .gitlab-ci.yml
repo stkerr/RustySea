@@ -53,6 +53,6 @@ fuzz_string_parse:
     - export CC=`which clang`
     - export CXX=`which clang++`
     - cargo install cargo-fuzz
-    - cargo fuzz run fuzz_string_parse -- -runs=0
+    - cargo fuzz run fuzz_string_parse -- -runs=0 -error_exitcode=0
     - find . -name fuzz_string_parse
     - ./gitlab-cov-fuzz run --regression=$REGRESSION -- ./fuzz/target/x86_64-unknown-linux-gnu/release/fuzz_string_parse
