@@ -33,8 +33,8 @@ macro_rules! op_test {
             let a:BigInt = create_bigint_from_string(a_val_str).unwrap();
             let b:BigInt = create_bigint_from_string(b_val_str).unwrap();
             let c:BigInt = create_bigint_from_string(c_val_str).unwrap();
-            println!("{}{}{}?={}", &a, stringify!($operator), &b, c);
-            println!("{}{}{}={}", &a, stringify!($operator), &b, &a $operator &b);
+            println!("Test: {} {} {} ?= {}", &a, stringify!($operator), &b, c);
+            println!("Result: {} {} {} = {}", &a, stringify!($operator), &b, &a $operator &b);
             assert!((a $operator b).compare(&c) == 0);
         }
     )
@@ -49,6 +49,7 @@ pub mod basic_shl_test;
 pub mod basic_shr_test;
 pub mod basic_sub_test;
 pub mod basic_negation_test;
+pub mod basic_internal_operators;
 pub mod general_tests;
 
 
