@@ -110,3 +110,5 @@ op_test!(sub_large_numbers, "0x0000000000000051000000000000030f" - "0x0000010000
 +op_test!(basic_sub_3, "0x51000000000000030F" - "0x100" == "0x51000000000000020F");
 +op_test!(basic_sub_4, "0x51000000000000030F" - "0x30f" == "0x510000000000000000");
 +op_test!(basic_sub_5, "0x51000000000000030F" - "0x310" == "0x50ffffffffffffffff");
++op_test!(basic_sub_6, "0x30F" - "0x10" == "0x2FF");
++op_test!(basic_sub_7, "0x10000000000000000" - "0x1" == "0xffffffffffffffff");
