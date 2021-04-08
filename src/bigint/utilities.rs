@@ -26,13 +26,13 @@ pub fn add_with_carry(a: u64, b:u64) -> (u64, u64) {
 pub fn signed_add_with_carry(a: u64, a_negative: bool, b:u64, b_negative: bool) -> (u64, u64, bool) {
     if a_negative && !b_negative {
         match a > b {
-            true => return (a-b, 0, true),
+            true => return (u64::MAX-a+b+1, 1, true),
             false => return (b-a, 0, false)
         };
     } else if !a_negative && b_negative {
         match a > b {
             true => return (a-b, 0, false),
-            false => return (b-a, 0, true)
+            false => return (u64::MAX-b+a+1, 1, true)
         };
     } else if !a_negative && !b_negative {
         let (x,y) = add_with_carry(a,b);
