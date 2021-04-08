@@ -105,3 +105,8 @@ fn test_operator_sub_negative_negative_negativeresult() {
 }
 
 op_test!(sub_large_numbers, "0x0000000000000051000000000000030f" - "0x0000010000000000" == "0x50ffffff000000030f");
++op_test!(basic_sub_1, "0x51000000000000030F" - "0x400" == "0x50ffffff000000030f");
++op_test!(basic_sub_2, "0x510" - "0x400" == "0x110");
++op_test!(basic_sub_3, "0x51000000000000030F" - "0x100" == "0x51000000000000020F");
++op_test!(basic_sub_4, "0x51000000000000030F" - "0x30f" == "0x510000000000000000");
++op_test!(basic_sub_5, "0x51000000000000030F" - "0x310" == "0x50ffffffffffffffff");
