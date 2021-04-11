@@ -7,12 +7,12 @@ fn main() {
     let a_result = rusty_sea::bigint::utilities::create_bigint_from_string("FFFFFFFFFFFFFFFF");
     let a:rusty_sea::bigint::BigInt = match a_result {
         Ok(v) => v,
-        Err(e) => panic!(e)
+        Err(e) => std::panic::panic_any(e)
     };
     let b_result = rusty_sea::bigint::utilities::create_bigint_from_string("FFFFFFFFFFFFFFFF");
     let b:rusty_sea::bigint::BigInt = match b_result {
         Ok(v) => v,
-        Err(e) => panic!(e)
+        Err(e) => std::panic::panic_any(e)
     };
     println!("{} + {}",&a,&b);
     let c:rusty_sea::bigint::BigInt = &a+&b;
@@ -36,7 +36,7 @@ fn main() {
 /*
     let mut d = match c {
         Ok(v) => v.add(&b),
-        Err(e) => panic!(e)
+        Err(e) => std::panic::panic_any(e)
     };
 
     let (e, f, g) = signed_add_with_carry(0xFFFFFFFFFFFFFFFF, true, 0xFFFFFFFFFFFFFFFF, true);
@@ -55,11 +55,11 @@ fn main() {
 
     // Do 5+10=15
     let one_result = create_bigint_from_string("1");
-    let one = match one_result { Ok(v) => v, Err(e) => panic!(e)};
+    let one = match one_result { Ok(v) => v, Err(e) => std::panic::panic_any(e)};
     let five_result = create_bigint_from_string("5");
-    let five = match five_result { Ok(v) => v, Err(e) => panic!(e)};
+    let five = match five_result { Ok(v) => v, Err(e) => std::panic::panic_any(e)};
     let ten_result = create_bigint_from_string("10");
-    let ten = match ten_result { Ok(v) => v, Err(e) => panic!(e)};
+    let ten = match ten_result { Ok(v) => v, Err(e) => std::panic::panic_any(e)};
     let fifteen = five.add(&ten);
     print_bigint(&fifteen);
 
@@ -74,7 +74,7 @@ fn main() {
 
     // Do some shifts
     let seven_result = create_bigint_from_string("7");
-    let seven = match seven_result { Ok(v) => v, Err(e) => panic!(e)};
+    let seven = match seven_result { Ok(v) => v, Err(e) => std::panic::panic_any(e)};
     let shifted:Result<BigInt, Error> = seven.left_shift(&one);
     match shifted {
         Ok(v) => print_bigint(&v),

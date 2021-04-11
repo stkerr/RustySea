@@ -1,6 +1,5 @@
 use ::bigint::BigInt;
 
-use std;
 use std::ops::*;
 
 impl Sub for BigInt {

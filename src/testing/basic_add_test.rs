@@ -90,13 +90,13 @@ fn test_basic_add_positive_positive_nocarry() {
     let a_result:Result<BigInt,Error> = create_bigint_from_string("0x7");
     let a:BigInt = match a_result {
         Ok(v) => v,
-        Err(e) => panic!(e)
+        Err(e) => std::panic::panic_any(e)
     };
 
     let b_result:Result<BigInt,Error> = create_bigint_from_string("0x7");
     let b:BigInt = match b_result {
         Ok(v) => v,
-        Err(e) => panic!(e)
+        Err(e) => std::panic::panic_any(e)
     };
     let c:BigInt = a.add(&b);
     assert!(c.negative == false);
@@ -108,13 +108,13 @@ fn test_basic_add_positive_negative_nocarry_positiveresult() {
     let a_result:Result<BigInt,Error> = create_bigint_from_string("0x7");
     let a:BigInt = match a_result {
         Ok(v) => v,
-        Err(e) => panic!(e)
+        Err(e) => std::panic::panic_any(e)
     };
 
     let b_result:Result<BigInt,Error> = create_bigint_from_string("-0x3");
     let b:BigInt = match b_result {
         Ok(v) => v,
-        Err(e) => panic!(e)
+        Err(e) => std::panic::panic_any(e)
     };
 
     let c:BigInt = a.add(&b);
@@ -127,13 +127,13 @@ fn test_basic_add_positive_negative_nocarry_negativeresult() {
     let a_result:Result<BigInt,Error> = create_bigint_from_string("0x7");
     let a:BigInt = match a_result {
         Ok(v) => v,
-        Err(e) => panic!(e)
+        Err(e) => std::panic::panic_any(e)
     };
 
     let b_result:Result<BigInt,Error> = create_bigint_from_string("-0x8");
     let b:BigInt = match b_result {
         Ok(v) => v,
-        Err(e) => panic!(e)
+        Err(e) => std::panic::panic_any(e)
     };
     let c:BigInt = a.add(&b);
     assert!(c.negative == true);
@@ -145,13 +145,13 @@ fn test_basic_add_negative_positive_nocarry_positiveresult() {
     let a_result:Result<BigInt,Error> = create_bigint_from_string("-0x7");
     let a:BigInt = match a_result {
         Ok(v) => v,
-        Err(e) => panic!(e)
+        Err(e) => std::panic::panic_any(e)
     };
 
     let b_result:Result<BigInt,Error> = create_bigint_from_string("0x8");
     let b:BigInt = match b_result {
         Ok(v) => v,
-        Err(e) => panic!(e)
+        Err(e) => std::panic::panic_any(e)
     };
     let c:BigInt = a.add(&b);
     assert!(c.negative == false);
@@ -163,13 +163,13 @@ fn test_basic_add_negative_positive_nocarry_negativeresult() {
     let a_result:Result<BigInt,Error> = create_bigint_from_string("-0x7");
     let a:BigInt = match a_result {
         Ok(v) => v,
-        Err(e) => panic!(e)
+        Err(e) => std::panic::panic_any(e)
     };
 
     let b_result:Result<BigInt,Error> = create_bigint_from_string("0x3");
     let b:BigInt = match b_result {
         Ok(v) => v,
-        Err(e) => panic!(e)
+        Err(e) => std::panic::panic_any(e)
     };
     let c:BigInt = a.add(&b);
     assert!(c.negative == true);
@@ -181,13 +181,13 @@ fn test_basic_add_negative_negative_nocarry() {
     let a_result:Result<BigInt,Error> = create_bigint_from_string("-0x3");
     let a:BigInt = match a_result {
         Ok(v) => v,
-        Err(e) => panic!(e)
+        Err(e) => std::panic::panic_any(e)
     };
 
     let b_result:Result<BigInt,Error> = create_bigint_from_string("-0x3");
     let b:BigInt = match b_result {
         Ok(v) => v,
-        Err(e) => panic!(e)
+        Err(e) => std::panic::panic_any(e)
     };
     let c:BigInt = a.add(&b);
     assert!(c.negative == true);
