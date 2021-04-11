@@ -61,3 +61,5 @@ func_test_triple!(signed_add_with_carry_8, signed_add_with_carry, u64::MAX, true
 func_test_triple!(signed_add_with_carry_9, signed_add_with_carry, 0, false, u64::MAX, true, 1, 1, true);
 
 func_test_triple!(signed_add_with_carry_10, signed_add_with_carry, u64::MAX, false, u64::MAX, true, 0, 0, false);
+func_test_triple!(signed_add_with_carry_11, signed_add_with_carry, 0x000000000000030f, false, 0x0000000000000400, true, 0xffffffffffffff0fu64, 1, true);
+func_test_triple!(signed_add_with_carry_12, signed_add_with_carry, 0x0000000000000400, true, 0x000000000000030f, false, 0xffffffffffffff0fu64, 1, true);
