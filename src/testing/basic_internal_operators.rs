@@ -1,5 +1,4 @@
 extern crate rusty_sea;
-use rusty_sea::bigint::*;
 use rusty_sea::bigint::utilities::*;
 
 macro_rules! func_test_tuple {

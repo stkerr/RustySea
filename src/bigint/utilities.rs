@@ -163,7 +163,7 @@ pub fn create_bigint_from_string(val: &str) -> Result<BigInt, Error> {
         let digit:Option<u32> = c.to_digit(16);
         
         match digit {
-            e @ Some(0...0xFF) => values.insert(0, e.unwrap() as u8),
+            e @ Some(0..=0xFF) => values.insert(0, e.unwrap() as u8),
             _ => return Err(Error::HexParsingError)
         };
     
