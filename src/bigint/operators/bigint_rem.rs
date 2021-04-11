@@ -52,7 +52,6 @@ impl<'a,'b> Rem<&'a BigInt> for &'b BigInt {
             let mut self_clone = self.clone();
             let mut mod_clone = b.clone();
             let mut prev_mod_clone:BigInt = b.clone();
-            let mut count:u8 = 0;
 
             // This is the reduction loop, so that we reduce our problem
             // to a problem simpler than the original. Namely, rather than
@@ -93,7 +92,6 @@ impl<'a,'b> Rem<&'a BigInt> for &'b BigInt {
                 println!("Reductor: {}", i);
             }
 
-            let mut count = 0;
             while mod_multiples.len() > 0 {
                 let reductor = mod_multiples.pop().unwrap();
 

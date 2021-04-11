@@ -12,21 +12,21 @@ impl Display for BigInt {
             let result:Result = f.write_fmt(format_args!("-"));
             match result {
                 Ok(v) => v,
-                Err(e) => panic!(e)
+                Err(e) => std::panic::panic_any(e)
             }
         }
 
         let mut result:Result = f.write_fmt(format_args!("0x"));
         match result {
             Ok(v) => v,
-            Err(e) => panic!(e)
+            Err(e) => std::panic::panic_any(e)
         }
 
         for i in data_copy {
             result = f.write_fmt(format_args!("{:016x}",i));
             match result {
                 Ok(v) => v,
-                Err(e) => panic!(e)
+                Err(e) => std::panic::panic_any(e)
             }
         }
         return Ok(());
