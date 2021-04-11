@@ -69,19 +69,25 @@ impl<'a,'b> Sub<&'a BigInt> for &'b BigInt {
             for i in 0..b.data.len() {
                 println!("self.data: {:x}", self.data[i]);
                 println!("b.data: {:x}", b.data[i]);
+                println!("borrow: {}", borrow);
                 // Add the raw values
                 let (interim, internal_borrow, temp_is_negative) = ::bigint::utilities::signed_add_with_carry(self.data[i], self.negative, b.data[i], true);
-                println!("interim: {}\ninternal_borrow: {}", interim, internal_borrow);
-                let temp_borrow:u64= internal_borrow + borrow;
-                // Add the previous borrow value
-                let (interim, internal_borrow, _) = ::bigint::utilities::signed_add_with_carry(interim, temp_is_negative, temp_borrow, true);
-                borrow = internal_borrow + temp_borrow;
+                println!("interim: {:x}\ninternal_borrow: {:x}\ntemp_is_negative: {}\n", interim, internal_borrow, temp_is_negative);
+                let temp_borrow:u64= borrow;
+                borrow = internal_borrow;
+                // Subtract the previous borrow value
+                let (interim, internal_borrow, _) = ::bigint::utilities::signed_add_with_carry(interim, false, temp_borrow, true);
+                //borrow = internal_borrow + temp_borrow;
 
+                // This operation is subtracting a borrow value only so shouldnt cause its own borrow.
+                assert!(internal_borrow==0);
+                println!("interim2: {:x}\ninternal_borrow2: {:x}", interim, internal_borrow);
                 // Add the digit to the BigInt
                 result.data.push(interim);
             }
 
             // Find the longer integer if it is there
+            println!("Lengths: {} ?== {}\n", self.data.len(), b.data.len());
             let (longer, starting_index) = match self.data.len() == b.data.len() {
                 true => (None, 0),
                 false => match  self.data.len() > b.data.len() {
@@ -95,9 +101,22 @@ impl<'a,'b> Sub<&'a BigInt> for &'b BigInt {
                 Some(x) => {
                     println!("Unequal sizes, parsing the longer.");
                     println!("{} - {}", self, b);
-                    for i in starting_index..x.data.len() {
-                        let (next, next_borrow) = ::bigint::utilities::add_with_carry(x.data[i], borrow);
+                    println!("starting_index:{}\n", starting_index);
+                    for i in starting_index..(x.data.len()-1) {
+
+                        let (next, next_borrow, _) = ::bigint::utilities::signed_add_with_carry(x.data[i], false, borrow, true);
                         borrow = next_borrow;
+                        result.data.push(next);
+                    }
+
+                    let (next, next_borrow, _) = ::bigint::utilities::signed_add_with_carry(x.data[x.data.len()-1], false, borrow, true);
+                    borrow = next_borrow;
+                    if next_borrow != 0 {
+                        // we are at the last digit, so dont do a final borrow, just add 0
+                        result.data.push(0);
+                        println!("Pushing 0\n");
+                    }
+                    else {
                         result.data.push(next);
                     }
                 },
@@ -106,10 +125,12 @@ impl<'a,'b> Sub<&'a BigInt> for &'b BigInt {
              
             // Subtract the final borrow if there is one
             if borrow > 0 {
+                println!("Final borrow is {}\n", borrow);
                 result.data.push(borrow);
             }
 
             while result.data.len() > 0 && result.data[result.data.len()-1] == 0 {
+                // Clean-up leading 0 bytes
                 result.data.pop();
             }
 

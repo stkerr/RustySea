@@ -105,7 +105,7 @@ fn test_operator_sub_negative_negative_negativeresult() {
 }
 
 op_test!(sub_large_numbers, "0x0000000000000051000000000000030f" - "0x0000010000000000" == "0x50ffffff000000030f");
-op_test!(basic_sub_1, "0x51000000000000030F" - "0x400" == "0x50ffffff000000030f");
+op_test!(basic_sub_1, "0x51000000000000030F" - "0x400" == "0x50ffffffffffffff0f");
 op_test!(basic_sub_2, "0x510" - "0x400" == "0x110");
 op_test!(basic_sub_3, "0x51000000000000030F" - "0x100" == "0x51000000000000020F");
 op_test!(basic_sub_4, "0x51000000000000030F" - "0x30f" == "0x510000000000000000");
@@ -113,3 +113,10 @@ op_test!(basic_sub_5, "0x51000000000000030F" - "0x310" == "0x50ffffffffffffffff"
 op_test!(basic_sub_6, "0x30F" - "0x10" == "0x2FF");
 op_test!(basic_sub_7, "0x10000000000000000" - "0x1" == "0xffffffffffffffff");
 op_test!(basic_sub_8, "0x100" - "0x1" == "0xff");
+
+op_test!(basic_sub_9, "0x10000000000000000"
+                    -  "0xffffffffffffffff" == "0x1");
+op_test!(basic_sub_10, "0x100000000000000000000000000000000"
+                    -   "0xffffffffffffffffffffffffffffffff" == "0x1");
+op_test!(basic_sub_11, "0x1000000000000000000000000000000000000000000000000"
+                    -   "0xffffffffffffffffffffffffffffffffffffffffffffffff" == "0x1");
