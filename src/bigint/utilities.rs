@@ -29,14 +29,20 @@ pub fn signed_add_with_carry(a: u64, a_negative: bool, b:u64, b_negative: bool) 
     }
 
     if a_negative && !b_negative {
-        match a > b {
-            true => return (u64::MAX-a+b+1, 1, true),
-            false => return (b-a, 0, false)
+        match a == b {
+            true => return (0,0,false),
+            false => match a > b {
+                true => return (u64::MAX-a+b+1, 1, true),
+                false => return (b-a, 0, false)
+            }
         };
     } else if !a_negative && b_negative {
-        match a > b {
-            true => return (a-b, 0, false),
-            false => return (u64::MAX-b+a+1, 1, true)
+        match a == b {
+            true => return (0,0,false),
+            false => match a > b {
+                true => return (a-b, 0, false),
+                false => return (u64::MAX-b+a+1, 1, true)
+            }
         };
     } else if !a_negative && !b_negative {
         let (x,y) = add_with_carry(a,b);
