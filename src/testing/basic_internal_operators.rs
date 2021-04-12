@@ -12,6 +12,7 @@ macro_rules! func_test_tuple {
                 $carry
             );
             let (calc_result, calc_carry) = $function($a, $b);
+            println!("\t= ({:x},{:x}\n", calc_result, calc_carry);
             assert!($result == calc_result);
             assert!($carry == calc_carry);
         }
@@ -46,7 +47,19 @@ func_test_tuple!(add_with_carry_2, add_with_carry,0,  u64::MAX,u64::MAX,0);
 func_test_tuple!(add_with_carry_3, add_with_carry,1,  u64::MAX,0,1);
 func_test_tuple!(add_with_carry_4, add_with_carry,10, u64::MAX,9,1);
 
+func_test_tuple!(add_with_carry_5, add_with_carry, u64::MAX, u64::MAX,u64::MAX-1,1);
+
 func_test_triple!(signed_add_with_carry_1, signed_add_with_carry, 0, false, 0, false, 0, 0, false);
 func_test_triple!(signed_add_with_carry_2, signed_add_with_carry, 0, true, 0, false, 0, 0, false);
 func_test_triple!(signed_add_with_carry_3, signed_add_with_carry, 1, true, 0, false, u64::MAX, 1, true);
 func_test_triple!(signed_add_with_carry_4, signed_add_with_carry, 0, false, 1, true, u64::MAX, 1, true);
+func_test_triple!(signed_add_with_carry_5, signed_add_with_carry, 0, false, 10, true, u64::MAX-9, 1, true);
+
+func_test_triple!(signed_add_with_carry_6, signed_add_with_carry, u64::MAX, false, u64::MAX, false, u64::MAX-1, 1, false);
+func_test_triple!(signed_add_with_carry_7, signed_add_with_carry, u64::MAX, true, u64::MAX, false, 0, 0, false);
+func_test_triple!(signed_add_with_carry_8, signed_add_with_carry, u64::MAX, true, 0, false, 1, 1, true);
+func_test_triple!(signed_add_with_carry_9, signed_add_with_carry, 0, false, u64::MAX, true, 1, 1, true);
+
+func_test_triple!(signed_add_with_carry_10, signed_add_with_carry, u64::MAX, false, u64::MAX, true, 0, 0, false);
+func_test_triple!(signed_add_with_carry_11, signed_add_with_carry, 0x000000000000030f, false, 0x0000000000000400, true, 0xffffffffffffff0fu64, 1, true);
+func_test_triple!(signed_add_with_carry_12, signed_add_with_carry, 0x0000000000000400, true, 0x000000000000030f, false, 0xffffffffffffff0fu64, 1, true);
