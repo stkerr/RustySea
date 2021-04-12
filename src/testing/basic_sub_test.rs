@@ -120,3 +120,8 @@ op_test!(basic_sub_10, "0x100000000000000000000000000000000"
                     -   "0xffffffffffffffffffffffffffffffff" == "0x1");
 op_test!(basic_sub_11, "0x1000000000000000000000000000000000000000000000000"
                     -   "0xffffffffffffffffffffffffffffffffffffffffffffffff" == "0x1");
+
+
+op_test!(sub_neg_pos_1, "-0x1" - "0x0" == "-0x1");
+op_test!(sub_neg_pos_2, "-0x1" - "0x1" == "-0x2");
+op_test!(sub_neg_pos_3, "-0x1" - "-0x1" == "0x0");
