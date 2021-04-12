@@ -91,8 +91,8 @@ impl<'a,'b> Sub<&'a BigInt> for &'b BigInt {
             let (longer, starting_index) = match self.data.len() == b.data.len() {
                 true => (None, 0),
                 false => match  self.data.len() > b.data.len() {
-                    true => (Some(self), self.data.len() - b.data.len()),
-                    false => (Some(b), b.data.len() - self.data.len())
+                    true => (Some(self), self.data.len() - (self.data.len() - b.data.len())),
+                    false => (Some(b), b.data.len() - (b.data.len() - self.data.len()))
                 }
             };
 
@@ -102,22 +102,13 @@ impl<'a,'b> Sub<&'a BigInt> for &'b BigInt {
                     println!("Unequal sizes, parsing the longer.");
                     println!("{} - {}", self, b);
                     println!("starting_index:{}\n", starting_index);
-                    for i in starting_index..(x.data.len()-1) {
 
+                    for i in starting_index..(x.data.len()) {
+                        println!("Doing {:x} - {:x}\n", x.data[i], borrow);
                         let (next, next_borrow, _) = ::bigint::utilities::signed_add_with_carry(x.data[i], false, borrow, true);
                         borrow = next_borrow;
                         result.data.push(next);
-                    }
-
-                    let (next, next_borrow, _) = ::bigint::utilities::signed_add_with_carry(x.data[x.data.len()-1], false, borrow, true);
-                    borrow = next_borrow;
-                    if next_borrow != 0 {
-                        // we are at the last digit, so dont do a final borrow, just add 0
-                        result.data.push(0);
-                        println!("Pushing 0\n");
-                    }
-                    else {
-                        result.data.push(next);
+                        println!("Pushed {:x}\nnext_borrow: {}", next, next_borrow);
                     }
                 },
                 None => {}
