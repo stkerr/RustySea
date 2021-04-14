@@ -45,6 +45,8 @@ test:cargo:
       junit: results.xml
 
 fuzz_string_parse:
+  variables:
+    COVFUZZ_ADDITIONAL_ARGS: '-max_total_time=300'
   image: 'rustlang/rust:nightly'
   extends: .fuzz_base
   script:
