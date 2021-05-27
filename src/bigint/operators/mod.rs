@@ -1,5 +1,6 @@
 mod bigint_add;
 mod bigint_bitand;
+mod bigint_bitnot;
 mod bigint_bitor;
 mod bigint_bitxor;
 mod bigint_clone;

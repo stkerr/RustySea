@@ -41,6 +41,8 @@ macro_rules! op_test {
 }
 
 pub mod basic_add_test;
+pub mod basic_bitand_test;
+pub mod basic_bitnot_test;
 pub mod basic_bitor_test;
 pub mod basic_bitxor_test;
 pub mod basic_mul_test;

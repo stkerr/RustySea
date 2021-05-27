@@ -31,12 +31,14 @@ impl<'a,'b> BitAnd<&'a BigInt> for &'b BigInt {
     type Output = BigInt;
 
     fn bitand(self, b: &'a BigInt) -> BigInt {
+
+
         // Add each of the u64 for a&b until there aren't anymore
         let mut result:BigInt = BigInt {negative: false, data: vec![] };
         for i in 0..std::cmp::min(self.data.len(), b.data.len()) {
 
-            //println!("{:x} {:x}", ~self.data[i], !self.data[i]);
-
+            
+            println!("{} {}", self.negative, b.negative);
             // Add the digit to the BigInt
             let temp = match self.negative == true {
                 true => match b.negative == true
@@ -55,6 +57,7 @@ impl<'a,'b> BitAnd<&'a BigInt> for &'b BigInt {
             result.data.push(temp);
         }
 
+        println!("Doing longers!");
         let (longer, starting_index) = match self.data.len() == b.data.len() {
             true => (None, 0),
             false => match self.data.len() > b.data.len() {
