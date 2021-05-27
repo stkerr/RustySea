@@ -35,8 +35,24 @@ impl<'a,'b> BitAnd<&'a BigInt> for &'b BigInt {
         let mut result:BigInt = BigInt {negative: false, data: vec![] };
         for i in 0..std::cmp::min(self.data.len(), b.data.len()) {
 
+            //println!("{:x} {:x}", ~self.data[i], !self.data[i]);
+
             // Add the digit to the BigInt
-            result.data.push(self.data[i] & b.data[i]);
+            let temp = match self.negative == true {
+                true => match b.negative == true
+                {
+                    true => (!self.data[i] + 1)  & (!b.data[i] + 1),
+                    false => (!self.data[i] + 1) & b.data[i],
+                },
+                false => match b.negative == true
+                {
+                    true => self.data[i] & (!b.data[i] + 1),
+                    false => self.data[i] & b.data[i]
+                }
+            };
+
+            println!("{:x} {:x} => {:x}", self.data[i], b.data[i], temp);
+            result.data.push(temp);
         }
 
         let (longer, starting_index) = match self.data.len() == b.data.len() {
