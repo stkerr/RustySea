@@ -1,6 +1,0 @@
-language: rust
-
-branches:
-  only:
-    - master
-    - stable
