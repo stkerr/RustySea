@@ -11,7 +11,7 @@ op_test!(dynamic_test_2, "-0x1c515b726c7a6640f86151a7d8e8a22bf" + "-0x42954810b3
 
 op_test!(dynamic_test_3, "0x3131bcb67c62110e7059b0044445d3f0" + "0x1f68ba9200caac1f9d1de3d759422b8ea" == "0x227bd65d6890cd3084237ed79d8688cda");
 
-op_test!(dynamic_test_4, "0x1a144c38b5485598b129d99101cb8a9ad" & "-0x1bd7df08e4afa6da03412d07fe71056fd" == "0x3011405100b028d090018a8a901");
+op_test!(dynamic_test_4, "0xa9ad" & "-0x56fd" == "0xa901");
 
 op_test!(dynamic_test_5, "-0x1e4986f98f69be13dad89ea218a448fc2" * "0x91a34c1cebeacdd6d10a703313ce6353" == "-0x113af7458b2755531ba2d0dbd179c629ce5b6cb787a03f9da07a3bed56beea1e6");
 

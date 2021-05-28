@@ -1,10 +1,17 @@
 use ::bigint::BigInt;
-use ::bigint::utilities;
 
-use std;
 use std::ops::*;
 
+impl Not for &BigInt {
+    type Output = BigInt;
+
+    fn not(self) -> Self::Output {
+        return !(self.clone());
+    }
+}
+
 impl Not for BigInt {
+
     type Output = Self;
 
     fn not(self) -> Self::Output {
@@ -15,13 +22,13 @@ impl Not for BigInt {
 
             let temp = !self.data[i];
 
-            println!("0x{:x} 0x{:x}", self.data[i], temp);
+            println!("bitnot: 0x{:x} 0x{:x}", self.data[i], temp);
 
 			result.data.push(temp);
         }
 
         // Add one
-        let one:BigInt  = ::bigint::utilities::create_bigint_from_string("0x1").unwrap();
+        let one:BigInt = ::bigint::utilities::create_bigint_from_string("0x1").unwrap();
         result = result + one;
 
         // Switch from 2's complement back to decimal
@@ -30,7 +37,7 @@ impl Not for BigInt {
 
             let temp = !result.data[i];
 
-            println!("0x{:x} 0x{:x}", result.data[i], temp);
+            println!("bitnot2: 0x{:x} 0x{:x}", result.data[i], temp);
 
 			result2.data.push(temp);
         }

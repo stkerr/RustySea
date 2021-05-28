@@ -1,3 +1,35 @@
+macro_rules! unary_test {
+   ($name:ident, $operator:tt $a:tt == $c:tt) => (
+
+        #[test]
+        fn $name () {
+            println!("Using {}, {}, and {}", 
+                $a, 
+                $c, 
+                stringify!($operator)
+            );
+
+            let mut a_val = String::new();
+            a_val.push_str(stringify!($a));
+            a_val.remove(0);
+            a_val.pop();
+            let a_val_str = &a_val[..];
+
+            let mut c_val = String::new();
+            c_val.push_str(stringify!($c));
+            c_val.remove(0);
+            c_val.pop();
+            let c_val_str = &c_val[..];
+
+            let a:BigInt = create_bigint_from_string(a_val_str).unwrap();
+            let c:BigInt = create_bigint_from_string(c_val_str).unwrap();
+            println!("Test: {} {} ?= {}", stringify!($operator), &a, c);
+            println!("Result: {} {} = {}", stringify!($operator), &a, $operator &a);
+            assert!(($operator a).compare(&c) == 0);
+        }
+    ) 
+}
+
 macro_rules! op_test {
     ($name:ident, $a:tt $operator:tt $b:tt == $c:tt) => (
 

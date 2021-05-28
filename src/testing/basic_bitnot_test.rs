@@ -13,3 +13,7 @@ fn test_operator_not_one() {
         panic!("Failed to initialize from string.");
     }
 }
+
+
+unary_test!(basic_bitnot_1, !"0x1" == "-0x2");
+unary_test!(basic_bitnot_2, !"-0x3" == "0x2");
