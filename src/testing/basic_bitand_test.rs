@@ -126,3 +126,5 @@ fn test_operator_bitand_length2_unequallengths() {
         panic!("Failed to initialize from string.");
     }
 }
+
+op_test!(bitand_neg_test_1, "-0x3" & "0x1" == "0x1");

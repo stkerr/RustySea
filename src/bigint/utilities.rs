@@ -98,6 +98,30 @@ impl BigInt {
     pub fn add(&self, b: &BigInt) -> BigInt {
         return self + b;
     }
+
+    pub fn twos_complement(&self) -> BigInt {
+        if self.negative == false {
+            return self.clone();
+        }
+
+        let mut result:BigInt = BigInt {negative: !self.negative, data: vec![] };
+
+        // Convert to 2's complement
+        for i in 0..self.data.len() {    
+
+            let temp = !self.data[i];
+
+            println!("bitnot: 0x{:x} 0x{:x}", self.data[i], temp);
+
+            result.data.push(temp);
+        }
+
+        // Add one
+        let one:BigInt = ::bigint::utilities::create_bigint_from_string("0x1").unwrap();
+        result = result + one;
+
+        return result;
+    }
 }
 
 pub fn print_bigint(val: &BigInt) {
