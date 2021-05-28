@@ -34,7 +34,7 @@ impl<'a,'b> BitAnd<&'a BigInt> for &'b BigInt {
         println!("0x{:x} 0x{:x} {} {}", self.data[0], b.data[0], self.negative, b.negative);
         if self.negative == true {
             let one:BigInt  = ::bigint::utilities::create_bigint_from_string("0x1").unwrap();
-            return (!self+one) & b;
+            return self.twos_complement() & b;
         }
 
         if b.negative == true {
@@ -43,7 +43,7 @@ impl<'a,'b> BitAnd<&'a BigInt> for &'b BigInt {
             let b2:BigInt = !b + one;
             println!("b2 negative: {}", b2.negative);
             println!("B: 0x{:x}\nflipped b: 0x{:x}", b.data[0], b2.data[0]);
-            return self & b2;
+            return self & b.twos_complement();
         }
 
         // Add each of the u64 for a&b until there aren't anymore

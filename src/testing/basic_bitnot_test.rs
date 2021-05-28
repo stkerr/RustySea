@@ -17,3 +17,6 @@ fn test_operator_not_one() {
 
 unary_test!(basic_bitnot_1, !"0x1" == "-0x2");
 unary_test!(basic_bitnot_2, !"-0x3" == "0x2");
+unary_test!(basic_bitnot_3, !"-0x56fd" == "0x56fc");
+unary_test!(basic_bitnot_4, !"0xfd" == "-0xfe");
+unary_test!(basic_bitnot_5, !"-0xfd" == "0xfc");
