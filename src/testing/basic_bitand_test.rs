@@ -8,7 +8,7 @@ fn test_operator_bitand() {
         let a:BigInt = v;
         if let Ok(v) = create_bigint_from_string("0x7") {
             let b:BigInt = v;
-            if let Ok(v) = create_bigint_from_string("0xF") {
+            if let Ok(v) = create_bigint_from_string("0x0") {
                 let c:BigInt = v;
                 let d = a & b;
                 println!("c: {}", c.data[0]);
@@ -97,34 +97,5 @@ fn test_operator_bitand_length2() {
     }
 }
 
-#[test]
-fn test_operator_bitand_length2_unequallengths() {
-    if let Ok(v) = create_bigint_from_string("0x0F0F0F0F0F0F0F0F0F0FFFFFFFFFFFFFFFFFFFFF") {
-        let a:BigInt = v;
-        print_bigint(&a);
-        if let Ok(v) = create_bigint_from_string("0xF4FFF0F0F0F0F0F0F0F0") {
-            let b:BigInt = v;
-            print_bigint(&b);
-            if let Ok(v) = create_bigint_from_string("0xF4FFF0F0F0F0F0F0F0F0") {
-                let c:BigInt = v;
-                let d = a & b;
-                println!("c[0]: {:16x}", c.data[0]);
-                println!("c[1]: {:16x}", c.data[1]);
-                println!("c[2]: {:16x}", c.data[2]);
-                println!("d[0]: {:16x}", d.data[0]);
-                println!("d[1]: {:16x}", d.data[1]);
-                println!("d[2]: {:16x}", d.data[2]);
-
-                assert!(c.compare(&d) == 0);
-            } else {
-                panic!("Failed to initialize from string.");
-            }
-        } else {
-            panic!("Failed to initialize from string.");
-        }
-    } else {
-        panic!("Failed to initialize from string.");
-    }
-}
-
 op_test!(bitand_neg_test_1, "-0x3" & "0x1" == "0x1");
+op_test!(bitand_test_1, "0x0F0F0F0F0F0F0F0F0F0FFFFFFFFFFFFFFFFFFFFF" & "0xF4FFF0F0F0F0F0F0F0F0" == "0xF4FFF0F0F0F0F0F0F0F0");

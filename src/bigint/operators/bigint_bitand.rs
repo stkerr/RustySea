@@ -57,30 +57,11 @@ impl<'a,'b> BitAnd<&'a BigInt> for &'b BigInt {
             assert!(b.negative == false);
             let temp = self.data[i] & b.data[i];
 
-            println!("bitand: 0x{:x} 0x{:x} => 0x{:x}", self.data[i], b.data[i], temp);
+            println!("bitand: 0x{:x} 0x{:x} => 0x{:x}", self.data[i], b.data[i], self.data[i]);
             result.data.push(temp);
         }
 
-        println!("Doing longers!");
-        let (longer, starting_index) = match self.data.len() == b.data.len() {
-            true => (None, 0),
-            false => match self.data.len() > b.data.len() {
-                true => (Some(self), b.data.len()),
-                false => (Some(b), self.data.len())
-            }
-        };
-
-        // Add in the longer tail of the two values
-        match longer {
-            Some(x) => {
-                println!("Unequal sizes, parsing the longer.");
-                for i in starting_index..x.data.len() {
-                    result.data.push(x.data[i]);
-                }
-            },
-            None => {}
-        }
-
+        // No need to look at tails, since it will always be 0 in a bitwise-and
         return result;
     }
 }
