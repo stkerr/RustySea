@@ -12,8 +12,26 @@ impl PartialOrd for BigInt {
             return Some(Ordering::Greater);
         }
 
+        // quickly check for which has more data blocks
+        if self.data.len() > other.data.len() {
+            return Some(Ordering::Greater);
+        }
+        if self.data.len() < other.data.len() {
+            return Some(Ordering::Less);
+        }
+        
+
         // do actual number comparison now
-        return None;
+        for i in 0..self.data.len() {
+            if self.data[i] > other.data[i] {
+                return Some(Ordering::Greater);
+            }
+            if self.data[i] < other.data[i] {
+                return Some(Ordering::Less);
+            }
+        }
+        
+        return Some(Ordering::Equal);
     }
 }
 
