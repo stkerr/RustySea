@@ -4,6 +4,7 @@ mod bigint_bitnot;
 mod bigint_bitor;
 mod bigint_bitxor;
 mod bigint_clone;
+mod bigint_cmp;
 mod bigint_div;
 mod bigint_mul;
 mod bigint_neg;

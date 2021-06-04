@@ -3,6 +3,16 @@ use ::bigint::utilities::*;
 
 use std::ops::*;
 
+/*
+fn karatsuba_mul(a: &BigInt, b: &BigInt) -> BigInt {
+    if (a < 10 || b < 10) {
+        return a * b;
+    }
+    let zero:BigInt  = create_bigint_from_string("0x0").unwrap();
+    return zero;
+}
+*/
+
 impl Mul for BigInt {
     type Output = BigInt;
 
