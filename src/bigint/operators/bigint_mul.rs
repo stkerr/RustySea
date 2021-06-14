@@ -4,7 +4,6 @@ use ::bigint::utilities::*;
 use std::ops::*;
 use std::cmp::*;
 
-
 fn karatsuba_mul(a_orig: &BigInt, b_orig: &BigInt) -> BigInt {
 
     let stored_negative;
@@ -23,9 +22,11 @@ fn karatsuba_mul(a_orig: &BigInt, b_orig: &BigInt) -> BigInt {
 
     // From https://en.wikipedia.org/wiki/Karatsuba_algorithm#Pseudocode
     //let ten:BigInt  = create_bigint_from_string("0x10").unwrap();
-    let two:BigInt  = create_bigint_from_string("0x2").unwrap();
+    let two:BigInt = create_bigint_from_string("0x2").unwrap();
+
+println!("{} x {}\n",a,b);
     if a < two || b < two {
-        return a * b;
+        return BigInt {negative:stored_negative, data: vec![a.data[0] * b.data[0]]};
     }
 
     /* Calculates the size of the numbers. */
@@ -33,9 +34,9 @@ fn karatsuba_mul(a_orig: &BigInt, b_orig: &BigInt) -> BigInt {
     let m:usize = min(a.data.len(), b.data.len());
     let m2:usize = m / 2; 
     /* m2 = ceil(m / 2) will also work */
-
     //let m_bi:BigInt = BigInt { negative:false, data: vec![m as u64]};
     let m2_bi:BigInt = BigInt { negative:false, data: vec![m2 as u64]};
+
 
     /* Split the digit sequences in the middle. */
     let high1:BigInt = BigInt {
@@ -63,7 +64,7 @@ fn karatsuba_mul(a_orig: &BigInt, b_orig: &BigInt) -> BigInt {
 
     /* 3 calls made to numbers approximately half the size. */
     let z0:BigInt = karatsuba_mul(&low1, &low2);
-    let z1:BigInt = karatsuba_mul(&(low1 + high1.clone()), &(low2 + high2.clone()));
+    let z1:BigInt = karatsuba_mul(&(low1 + &high1), &(&low2 + &high2));
     let z2:BigInt = karatsuba_mul(&high1, &high2);
 
     let mut first:BigInt = &two << (&m2_bi * &two);
@@ -71,7 +72,7 @@ fn karatsuba_mul(a_orig: &BigInt, b_orig: &BigInt) -> BigInt {
 
     let mut second:BigInt = two.clone() << &m2_bi;
     second = second * (z1 - z2 - &z0);
-    let mut result:BigInt = first + second + &z0;
+    let mut result:BigInt = first + second + z0;
 
     result.negative = stored_negative;
 
@@ -106,6 +107,6 @@ impl<'a,'b> Mul<&'a BigInt> for &'b BigInt {
     type Output = BigInt;
 
     fn mul(self, b: &'a BigInt) -> BigInt {
-        return karatsuba_mul(&self, &b);
+        return karatsuba_mul(self, b);
     }
 }
