@@ -107,6 +107,12 @@ impl<'a,'b> Mul<&'a BigInt> for &'b BigInt {
     type Output = BigInt;
 
     fn mul(self, b: &'a BigInt) -> BigInt {
-        return karatsuba_mul(self, b);
+        let mut interim:BigInt = karatsuba_mul(self, b);
+
+        if interim.data.len() == 1 && interim.data[0] == 0 {
+            interim.negative = false;
+        }
+
+        return interim;
     }
 }
