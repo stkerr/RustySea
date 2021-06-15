@@ -72,10 +72,6 @@ fn karatsuba_mul(a_orig: &BigInt, b_orig: &BigInt) -> BigInt {
 
 
     // From https://en.wikipedia.org/wiki/Karatsuba_algorithm#Pseudocode
-    //let ten:BigInt  = create_bigint_from_string("0x10").unwrap();
-    let two:BigInt = create_bigint_from_string("0x2").unwrap();
-    //let two:BigInt = create_bigint_from_string("0x40").unwrap();
-    let base:BigInt = create_bigint_from_string("0x10000000000000000").unwrap();
 
     //let max_size:BigInt = create_bigint_from_string("0xffffffffffffffff").unwrap();
     let max_size:BigInt = create_bigint_from_string("0xffffffffffffffff").unwrap();
@@ -92,8 +88,6 @@ println!("max:  {}\n", max_size);
     let m:usize = min(a.data.len(), b.data.len());
     let m2:usize = m / 2; 
     /* m2 = ceil(m / 2) will also work */
-    //let m_bi:BigInt = BigInt { negative:false, data: vec![m as u64]};
-    let m2_bi:BigInt = BigInt { negative:false, data: vec![m2 as u64]};
 
 
     /* Split the digit sequences in the middle. */
