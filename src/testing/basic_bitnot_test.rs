@@ -20,3 +20,4 @@ unary_test!(basic_bitnot_2, !"-0x3" == "0x2");
 unary_test!(basic_bitnot_3, !"-0x56fd" == "0x56fc");
 unary_test!(basic_bitnot_4, !"0xfd" == "-0xfe");
 unary_test!(basic_bitnot_5, !"-0xfd" == "0xfc");
+unary_test!(basic_bitnot_6, !"0x0" == "-0x1");

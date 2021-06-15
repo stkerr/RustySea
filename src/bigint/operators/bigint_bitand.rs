@@ -31,7 +31,7 @@ impl<'a,'b> BitAnd<&'a BigInt> for &'b BigInt {
 
     fn bitand(self, b: &'a BigInt) -> BigInt {
 
-        println!("0x{:x} 0x{:x} {} {}", self.data[0], b.data[0], self.negative, b.negative);
+        println!("bitand start: 0x{:x} 0x{:x} {} {}", self.data[0], b.data[0], self.negative, b.negative);
         if self.negative == true {
             return self.twos_complement() & b;
         }

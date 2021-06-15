@@ -4,7 +4,6 @@ use std::cmp::Ordering;
 impl std::cmp::Ord for BigInt {
     fn cmp(&self, other: &Self) -> std::cmp::Ordering {
 
-	println!("Full order comparison\n");
 
 	// quickly check signs
         if self.negative && !other.negative {
@@ -39,7 +38,6 @@ impl std::cmp::Ord for BigInt {
 impl PartialOrd for BigInt {
     fn partial_cmp(&self, other: &Self) -> Option<Ordering> {
 
-	println!("Partial order comparison\n");
         // quickly check signs
         if self.negative && !other.negative {
             return Some(Ordering::Less);
