@@ -17,6 +17,7 @@ impl Not for BigInt {
     fn not(self) -> Self::Output {
         let mut result:BigInt = BigInt {negative: !self.negative, data: vec![] };
 
+        println!("Bitnot start: {}", self);
         // Convert to 2's complement
         for i in 0..self.data.len() {    
 

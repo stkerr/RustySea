@@ -99,3 +99,4 @@ fn test_operator_bitand_length2() {
 
 op_test!(bitand_neg_test_1, "-0x3" & "0x1" == "0x1");
 op_test!(bitand_test_1, "0x0F0F0F0F0F0F0F0F0F0FFFFFFFFFFFFFFFFFFFFF" & "0xF4FFF0F0F0F0F0F0F0F0" == "0xF4FFF0F0F0F0F0F0F0F0");
+op_test!(bitand_test_2, "0x0" & "0x1" == "0x0");

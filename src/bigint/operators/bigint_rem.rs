@@ -35,6 +35,7 @@ impl<'a,'b> Rem<&'a BigInt> for &'b BigInt {
             let mut self_clone = self.clone();
             self_clone.negative = false;
 
+            println!("here we go.,.");
             let mut temp = self_clone % b;
             temp = temp + b;
 
