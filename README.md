@@ -1,3 +1,5 @@
+_Moved to GitLab at https://gitlab.com/stkerr/RustySea_
+
 # RustySea
 An arbitrary-precision integer library for Rust.
 
