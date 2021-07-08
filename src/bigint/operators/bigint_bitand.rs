@@ -1,4 +1,4 @@
-use ::bigint::BigInt;
+use crate::bigint::BigInt;
 
 use std::ops::*;
 
@@ -37,7 +37,7 @@ impl<'a,'b> BitAnd<&'a BigInt> for &'b BigInt {
         }
 
         if b.negative == true {
-            let one:BigInt  = ::bigint::utilities::create_bigint_from_string("0x1").unwrap();
+            let one:BigInt  = crate::bigint::utilities::create_bigint_from_string("0x1").unwrap();
             println!("Here");
             let b2:BigInt = !b + one;
             println!("b2 negative: {}", b2.negative);

@@ -1,4 +1,4 @@
-use ::bigint::BigInt;
+use crate::bigint::BigInt;
 
 use std::ops::*;
 
@@ -29,7 +29,7 @@ impl Not for BigInt {
         }
 
         // Add one
-        let one:BigInt = ::bigint::utilities::create_bigint_from_string("0x1").unwrap();
+        let one:BigInt = crate::bigint::utilities::create_bigint_from_string("0x1").unwrap();
         result = result + one;
 
         // Switch from 2's complement back to decimal

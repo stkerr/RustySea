@@ -1,4 +1,4 @@
-use ::bigint::BigInt;
+use crate::bigint::BigInt;
 
 use std::ops::*;
 
@@ -71,12 +71,12 @@ impl<'a,'b> Sub<&'a BigInt> for &'b BigInt {
                 println!("b.data: {:x}", b.data[i]);
                 println!("borrow: {}", borrow);
                 // Add the raw values
-                let (interim, internal_borrow, temp_is_negative) = ::bigint::utilities::signed_add_with_carry(self.data[i], self.negative, b.data[i], true);
+                let (interim, internal_borrow, temp_is_negative) = crate::bigint::utilities::signed_add_with_carry(self.data[i], self.negative, b.data[i], true);
                 println!("interim: {:x}\ninternal_borrow: {:x}\ntemp_is_negative: {}\n", interim, internal_borrow, temp_is_negative);
                 let temp_borrow:u64= borrow;
                 borrow = internal_borrow;
                 // Subtract the previous borrow value
-                let (interim, internal_borrow, _) = ::bigint::utilities::signed_add_with_carry(interim, false, temp_borrow, true);
+                let (interim, internal_borrow, _) = crate::bigint::utilities::signed_add_with_carry(interim, false, temp_borrow, true);
                 //borrow = internal_borrow + temp_borrow;
 
                 // This operation is subtracting a borrow value only so shouldnt cause its own borrow.
@@ -105,7 +105,7 @@ impl<'a,'b> Sub<&'a BigInt> for &'b BigInt {
 
                     for i in starting_index..(x.data.len()) {
                         println!("Doing {:x} - {:x}\n", x.data[i], borrow);
-                        let (next, next_borrow, _) = ::bigint::utilities::signed_add_with_carry(x.data[i], false, borrow, true);
+                        let (next, next_borrow, _) = crate::bigint::utilities::signed_add_with_carry(x.data[i], false, borrow, true);
                         borrow = next_borrow;
                         result.data.push(next);
                         println!("Pushed {:x}\nnext_borrow: {}", next, next_borrow);

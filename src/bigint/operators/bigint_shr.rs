@@ -1,5 +1,5 @@
-use ::bigint::BigInt;
-use ::bigint::utilities::*;
+use crate::bigint::BigInt;
+use crate::bigint::utilities::*;
 
 use std::ops::*;
 

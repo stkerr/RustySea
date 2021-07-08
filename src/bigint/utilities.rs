@@ -1,4 +1,4 @@
-use ::bigint::*;
+use crate::bigint::*;
 
 // Returns a tuple of (low-order result, carry)
 // where low-order result is a u64 and carry flag is a
@@ -117,7 +117,7 @@ impl BigInt {
         }
 
         // Add one
-        let one:BigInt = ::bigint::utilities::create_bigint_from_string("0x1").unwrap();
+        let one:BigInt = crate::bigint::utilities::create_bigint_from_string("0x1").unwrap();
         result = result + one;
 
         return result;
