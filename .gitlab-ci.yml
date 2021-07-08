@@ -34,6 +34,7 @@ test:cargo:
   script:
     - rustc --version && cargo --version  # Print version info for debugging
     - cargo install cargo2junit
+    - cargo check
     - cargo test -- -Z unstable-options --format json | cargo2junit > results.xml
   artifacts:
     untracked: false

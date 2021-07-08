@@ -1,4 +1,4 @@
-use ::bigint::BigInt;
+use crate::bigint::BigInt;
 
 use std;
 use std::ops::*;

@@ -1,4 +1,4 @@
-use ::bigint::BigInt;
+use crate::bigint::BigInt;
 
 impl Clone for BigInt {
     fn clone(&self) -> BigInt {

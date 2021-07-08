@@ -1,4 +1,4 @@
-use ::bigint::BigInt;
+use crate::bigint::BigInt;
 
 use std;
 use std::ops::*;
@@ -53,11 +53,11 @@ impl<'a,'b> Add<&'a BigInt> for &'b BigInt {
         for i in 0..std::cmp::min(self.data.len(), b.data.len()) {
 
             // Add the raw values
-            let (interim, internal_carry) = ::bigint::utilities::add_with_carry(self.data[i], b.data[i]);
+            let (interim, internal_carry) = crate::bigint::utilities::add_with_carry(self.data[i], b.data[i]);
             let temp_carry:u64= internal_carry;
 
             // Add the previous carry value
-            let (interim, internal_carry) = ::bigint::utilities::add_with_carry(interim, carry);
+            let (interim, internal_carry) = crate::bigint::utilities::add_with_carry(interim, carry);
             carry = internal_carry + temp_carry;
 
             // Add the digit to the BigInt
@@ -78,7 +78,7 @@ impl<'a,'b> Add<&'a BigInt> for &'b BigInt {
             Some(x) => {
                 // println!("Unequal sizes, parsing the longer.");
                 for i in starting_index..x.data.len() {
-                    let (next, next_carry) = ::bigint::utilities::add_with_carry(x.data[i], carry);
+                    let (next, next_carry) = crate::bigint::utilities::add_with_carry(x.data[i], carry);
                     carry = next_carry;
                     result.data.push(next);
                 }
