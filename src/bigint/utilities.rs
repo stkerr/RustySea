@@ -110,9 +110,6 @@ impl BigInt {
         for i in 0..self.data.len() {    
 
             let temp = !self.data[i];
-
-            println!("bitnot: 0x{:x} 0x{:x}", self.data[i], temp);
-
             result.data.push(temp);
         }
 

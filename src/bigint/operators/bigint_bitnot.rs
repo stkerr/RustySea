@@ -17,14 +17,10 @@ impl Not for BigInt {
     fn not(self) -> Self::Output {
         let mut result:BigInt = BigInt {negative: !self.negative, data: vec![] };
 
-        println!("Bitnot start: {}", self);
         // Convert to 2's complement
         for i in 0..self.data.len() {    
 
             let temp = !self.data[i];
-
-            println!("bitnot: 0x{:x} 0x{:x}", self.data[i], temp);
-
 			result.data.push(temp);
         }
 
@@ -37,9 +33,6 @@ impl Not for BigInt {
         for i in 0..self.data.len() {    
 
             let temp = !result.data[i];
-
-            println!("bitnot2: 0x{:x} 0x{:x}", result.data[i], temp);
-
 			result2.data.push(temp);
         }
 
