@@ -34,7 +34,7 @@ macro_rules! op_test {
     ($name:ident, $a:tt $operator:tt $b:tt == $c:tt) => (
 
         #[test]
-        #[ntest::timeout(2000)]
+        #[ntest::timeout(5000)]
         fn $name () {
             println!("Using {}, {}, {}, and {}", 
                 $a, 

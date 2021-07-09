@@ -28,7 +28,7 @@ with open('dynamic_tests.rs', 'w') as f:
     tests = 100
     for i in range(tests):
         op = random.choice(ops)
-        op = ops[2]
+
         x = random.randint(-2<<op[2], 2<<op[2])
         y = random.randint(-2<<op[2], 2<<op[2])
 
