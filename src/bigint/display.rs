@@ -22,11 +22,20 @@ impl Display for BigInt {
             Err(e) => std::panic::panic_any(e)
         }
 
-        for i in data_copy {
-            result = f.write_fmt(format_args!("{:016x}",i));
+        if data_copy.len() == 0 {
+            result = f.write_str("0");
             match result {
                 Ok(v) => v,
                 Err(e) => std::panic::panic_any(e)
+            }
+        }
+        else {
+            for i in data_copy {
+                result = f.write_fmt(format_args!("{:016x}",i));
+                match result {
+                    Ok(v) => v,
+                    Err(e) => std::panic::panic_any(e)
+                }
             }
         }
         return Ok(());

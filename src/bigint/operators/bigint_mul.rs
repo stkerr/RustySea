@@ -19,6 +19,9 @@ fn gradeschool_mul(a: &BigInt, b: &BigInt) -> BigInt {
 
         return c
         */
+
+        println!("Grade school math: {} {}", a, b);
+
         let zero:BigInt  = create_bigint_from_string("0x0").unwrap();
 
         if a.compare(&zero) == 0 || b.compare(&zero) == 0 {
@@ -82,7 +85,7 @@ println!("max:  {}\n", max_size);
         println!("Going gradeschool.");
         return gradeschool_mul(&a_orig, &b_orig);
     }
-    println!("Going karatsuba.");
+    println!("Going karatsuba. {} {}", &a, &b);
     /* Calculates the size of the numbers. */
     //m = min(size_base10(num1), size_base10(num2))
     let m:usize = min(a.data.len(), b.data.len());
