@@ -40,23 +40,33 @@ impl<'a,'b> BitOr<&'a BigInt> for &'b BigInt {
         a = self.clone();
         b_copy = b.clone();
 
-        if a.data.len() < b.data.len() {
+        if self.data.len() < b.data.len() {
             for _i in 0..b.data.len()-a.data.len() {
-                a.data.push(0);
+                if flip {
+                    // if negative, add a two's complement -2 block
+                    a.data.push(0xfffffffffffffffe);
+                } else {
+                    a.data.push(0);
+                }
             }
         } else if a.data.len() > b.data.len() {
             for _i in 0..a.data.len()-b_copy.data.len() {
-                b_copy.data.push(0);
+                if flip {
+                    // if negative, add a two's complement -2 block
+                    b_copy.data.push(0xfffffffffffffffe);
+                } else {
+                    b_copy.data.push(0);
+                }
             }
         }
 
         if self.negative {
-            a = (self).twos_complement();
+            a = a.twos_complement();
             flip = true;
         }
 
         if b.negative {
-            b_copy = (b).twos_complement();
+            b_copy = b_copy.twos_complement();
             flip = true;
         }
 
@@ -66,6 +76,12 @@ impl<'a,'b> BitOr<&'a BigInt> for &'b BigInt {
             temp.negative=true; // ensure that 2's complement actually sees the value as negative
             temp = temp.twos_complement();
             temp.negative=true;
+
+            // We might have a leading 0 block, so drop it if so
+            if temp.data[temp.data.len()-1] == 0 {
+                temp.data.pop();
+            }
+
             return temp;
         }
 
@@ -77,7 +93,6 @@ impl<'a,'b> BitOr<&'a BigInt> for &'b BigInt {
             result.data.push(a.data[i] | b_copy.data[i]);
         }
 
-        
         return result;
     }
 }
