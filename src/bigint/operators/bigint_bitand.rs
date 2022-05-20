@@ -35,28 +35,6 @@ impl<'a,'b> BitAnd<&'a BigInt> for &'b BigInt {
         let mut a:BigInt = self.clone();
         let mut b_copy = b.clone();
 
-        if self.data.len() < b.data.len() {
-            for _i in 0..b.data.len()-a.data.len() {
-                println!("Adding block.");
-                if flip {
-                    // if negative, add a two's complement -2 block
-                    a.data.push(0xfffffffffffffffe);
-                } else {
-                    a.data.push(0);
-                }
-            }
-        } else if a.data.len() > b.data.len() {
-            for _i in 0..a.data.len()-b_copy.data.len() {
-                println!("Adding block.");
-                if flip {
-                    // if negative, add a two's complement -2 block
-                    b_copy.data.push(0xfffffffffffffffe);
-                } else {
-                    b_copy.data.push(0);
-                }
-            }
-        }
-
         if self.negative == true {
             flip = true;
             a = self.twos_complement();
@@ -65,6 +43,28 @@ impl<'a,'b> BitAnd<&'a BigInt> for &'b BigInt {
         if b.negative == true {
             flip = true;
             b_copy = b_copy.twos_complement();
+        }
+
+        if self.data.len() < b.data.len() {
+            for _i in 0..b.data.len()-a.data.len() {
+                println!("Adding block a.");
+                if self.negative {
+                    // if negative, add a two's complement -1 block
+                    a.data.push(0xffffffffffffffff);
+                } else {
+                    a.data.push(0);
+                }
+            }
+        } else if a.data.len() > b.data.len() {
+            for _i in 0..a.data.len()-b_copy.data.len() {
+                
+                if b.negative {
+                    // if negative, add a two's complement -1 block
+                    b_copy.data.push(0xffffffffffffffff);
+                } else {
+                    b_copy.data.push(0);
+                }
+            }
         }
 
         if flip {
