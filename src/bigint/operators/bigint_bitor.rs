@@ -31,19 +31,38 @@ impl<'a,'b> BitOr<&'a BigInt> for &'b BigInt {
     type Output = BigInt;
 
     fn bitor(self, b: &'a BigInt) -> BigInt {
-        // Add each of the u64 for a&b until there aren't anymore
-        let mut result:BigInt = BigInt {negative: false, data: vec![] };
-        for i in 0..std::cmp::min(self.data.len(), b.data.len()) {
+        
+        let a:BigInt;
+        let b_copy:BigInt;
+        let one:BigInt = crate::bigint::utilities::create_bigint_from_string("0x1").unwrap();
+        let mut flip:bool = false;
 
-            // Add the digit to the BigInt
-            result.data.push(self.data[i] | b.data[i]);
+        if self.negative {
+            a = (self).twos_complement();
+            flip = true;
+        } else {
+            a = self.clone();
+        }
+        if b.negative {
+            b_copy = (b).twos_complement();
+            flip = true;
+        } else {
+            b_copy = b.clone();
         }
 
-        let (longer, starting_index) = match self.data.len() == b.data.len() {
+        // Add each of the u64 for a&b until there aren't anymore
+        let mut result:BigInt = BigInt {negative: false, data: vec![] };
+        for i in 0..std::cmp::min(a.data.len(), b_copy.data.len()) {
+
+            // Add the digit to the BigInt
+            result.data.push(a.data[i] | b_copy.data[i]);
+        }
+
+        let (longer, starting_index) = match a.data.len() == b.data.len() {
             true => (None, 0),
-            false => match self.data.len() > b.data.len() {
-                true => (Some(self), b.data.len()),
-                false => (Some(b), self.data.len())
+            false => match a.data.len() > b_copy.data.len() {
+                true => (Some(a), b_copy.data.len()),
+                false => (Some(b_copy), self.data.len())
             }
         };
 
@@ -56,6 +75,12 @@ impl<'a,'b> BitOr<&'a BigInt> for &'b BigInt {
                 }
             },
             None => {}
+        }
+        
+        if flip {
+            result.negative=true;
+            result = (result).twos_complement();
+            result.negative=true;
         }
 
         return result;
