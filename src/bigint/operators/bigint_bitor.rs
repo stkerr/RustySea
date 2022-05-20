@@ -32,22 +32,41 @@ impl<'a,'b> BitOr<&'a BigInt> for &'b BigInt {
 
     fn bitor(self, b: &'a BigInt) -> BigInt {
         
-        let a:BigInt;
-        let b_copy:BigInt;
-        let one:BigInt = crate::bigint::utilities::create_bigint_from_string("0x1").unwrap();
+        let mut a:BigInt;
+        let mut b_copy:BigInt;
+        let _one:BigInt = crate::bigint::utilities::create_bigint_from_string("0x1").unwrap();
         let mut flip:bool = false;
+        
+        a = self.clone();
+        b_copy = b.clone();
+
+        if a.data.len() < b.data.len() {
+            for _i in 0..b.data.len()-a.data.len() {
+                a.data.push(0);
+            }
+        } else if a.data.len() > b.data.len() {
+            for _i in 0..a.data.len()-b_copy.data.len() {
+                b_copy.data.push(0);
+            }
+        }
 
         if self.negative {
             a = (self).twos_complement();
             flip = true;
-        } else {
-            a = self.clone();
         }
+
         if b.negative {
             b_copy = (b).twos_complement();
             flip = true;
-        } else {
-            b_copy = b.clone();
+        }
+
+        if flip {
+            // if we need to do a sign flip, do that and return the result of the flipped numbers
+            let mut temp:BigInt = a | b_copy;
+            temp.negative=true; // ensure that 2's complement actually sees the value as negative
+            temp = temp.twos_complement();
+            temp.negative=true;
+            return temp;
         }
 
         // Add each of the u64 for a&b until there aren't anymore
@@ -58,31 +77,7 @@ impl<'a,'b> BitOr<&'a BigInt> for &'b BigInt {
             result.data.push(a.data[i] | b_copy.data[i]);
         }
 
-        let (longer, starting_index) = match a.data.len() == b.data.len() {
-            true => (None, 0),
-            false => match a.data.len() > b_copy.data.len() {
-                true => (Some(a), b_copy.data.len()),
-                false => (Some(b_copy), self.data.len())
-            }
-        };
-
-        // Add in the longer tail of the two values
-        match longer {
-            Some(x) => {
-                println!("Unequal sizes, parsing the longer.");
-                for i in starting_index..x.data.len() {
-                    result.data.push(x.data[i]);
-                }
-            },
-            None => {}
-        }
         
-        if flip {
-            result.negative=true;
-            result = (result).twos_complement();
-            result.negative=true;
-        }
-
         return result;
     }
 }
