@@ -21,43 +21,41 @@ fn doubleadd_mul(a: &BigInt, b: &BigInt) -> BigInt {
             b = b >> 1
         return top + add_buffer 
      */
-
     
     let zero:BigInt  = create_bigint_from_string("0x0").unwrap();
+    let one:BigInt  = create_bigint_from_string("0x1").unwrap();
 
-    print_bigint(a);
-    print_bigint(b);
-    print_bigint(&zero);
-
-    println!("a?=0 : {}", a == &zero);
-    println!("b?=0 : {}", b == &zero);
     if a.compare(&zero) == 0 || b.compare(&zero) == 0 || a.data.len() == 0 || b.data.len() == 0 {
         // Hardcode multiply by zero
-        eprintln!("Zero shortcut!");
         std::io::stdout().flush().unwrap();
         return zero.clone();
     }
 
-    let a_copy:u64 = a.data[0];
-    let mut b_copy:u64 = b.data[0];
+    let mut b_copy:BigInt = b.clone();
+    b_copy.negative = false; // set to false temporarily and calculate sign at the end
 
-    let mut add_buffer:u64 = 0;
-    let mut top:u64 = a_copy;
+    let mut add_buffer:BigInt = zero.clone();
+    let mut top:BigInt = a.clone();
 
-    let digit:u64 = b_copy % 2;
-
-    while b_copy > 1 {
-        println!("In the loop.");
+    while b_copy > one.clone() {
+        let digit:u64 = b_copy.data[0] % 2;
 
         if digit == 1 {
-            add_buffer = add_buffer + top
+            add_buffer = add_buffer + top.clone();
         }
-        top = top << 1;
-        b_copy = b_copy >> 1;
+        top = top.clone() << one.clone();
+        b_copy = b_copy >> one.clone();
     }
-    println!("Out of the loop.");
-    // TODO: Fix this
-    return create_bigint_from_string(&("0x".to_owned() + &((top + add_buffer).to_string()))).unwrap();
+    
+    let mut result:BigInt = top + add_buffer;
+    // calculate the correct sign value
+    if a.negative != b.negative {
+        result.negative = true;
+    } else {
+        result.negative = false;
+    }
+
+    return result;
 
 }
 
@@ -268,7 +266,7 @@ impl<'a,'b> Mul<&'a BigInt> for &'b BigInt {
     type Output = BigInt;
 
     fn mul(self, b: &'a BigInt) -> BigInt {
-        let mut interim:BigInt = karatsuba_mul(self, b);
+        let mut interim:BigInt = doubleadd_mul(self, b);
 
         if interim.data.len() == 1 && interim.data[0] == 0 {
             interim.negative = false;
