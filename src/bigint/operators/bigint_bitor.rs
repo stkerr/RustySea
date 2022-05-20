@@ -34,7 +34,6 @@ impl<'a,'b> BitOr<&'a BigInt> for &'b BigInt {
         
         let mut a:BigInt;
         let mut b_copy:BigInt;
-        let _one:BigInt = crate::bigint::utilities::create_bigint_from_string("0x1").unwrap();
         let mut flip:bool = false;
         
         a = self.clone();
@@ -42,21 +41,11 @@ impl<'a,'b> BitOr<&'a BigInt> for &'b BigInt {
 
         if self.data.len() < b.data.len() {
             for _i in 0..b.data.len()-a.data.len() {
-                if flip {
-                    // if negative, add a two's complement -2 block
-                    a.data.push(0xfffffffffffffffe);
-                } else {
-                    a.data.push(0);
-                }
+                a.data.push(0);
             }
         } else if a.data.len() > b.data.len() {
             for _i in 0..a.data.len()-b_copy.data.len() {
-                if flip {
-                    // if negative, add a two's complement -2 block
-                    b_copy.data.push(0xfffffffffffffffe);
-                } else {
-                    b_copy.data.push(0);
-                }
+                b_copy.data.push(0);
             }
         }
 
@@ -84,6 +73,9 @@ impl<'a,'b> BitOr<&'a BigInt> for &'b BigInt {
 
             return temp;
         }
+
+        assert!(self.negative == false);
+        assert!(b.negative == false);
 
         // Add each of the u64 for a&b until there aren't anymore
         let mut result:BigInt = BigInt {negative: false, data: vec![] };
