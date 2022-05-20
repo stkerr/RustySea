@@ -1,54 +1,108 @@
 use crate::bigint::BigInt;
 use crate::bigint::utilities::*;
 
+use std::io::*;
 use std::ops::*;
 use std::cmp::*;
 use std::convert::TryInto;
 
+fn doubleadd_mul(a: &BigInt, b: &BigInt) -> BigInt {
+    /*
+     * 
+    def mult(a, b):
+        add_buffer = 0
+        top = a
+        while b > 1:
+            digit = b % 2
+            if digit == 1:
+                add_buffer = add_buffer + top
 
-fn gradeschool_mul(a: &BigInt, b: &BigInt) -> BigInt {
-        /*
-         * From Wikipedia
-        c = 0
+            top = top << 1
+            b = b >> 1
+        return top + add_buffer 
+     */
 
-        while b ≠ 0
-            if (b and 1) ≠ 0
-                c = c + a
-            left shift a by 1
-            right shift b by 1
+    
+    let zero:BigInt  = create_bigint_from_string("0x0").unwrap();
 
-        return c
-        */
+    print_bigint(a);
+    print_bigint(b);
+    print_bigint(&zero);
 
-        println!("Grade school math: {} {}", a, b);
-
-        let zero:BigInt  = create_bigint_from_string("0x0").unwrap();
-
-        if a.compare(&zero) == 0 || b.compare(&zero) == 0 {
-            // Hardcode multiply by zero
-            return zero.clone();
-        }
-
-        let one:BigInt = create_bigint_from_string("0x1").unwrap();
-        let mut c:BigInt = zero.clone();
-        let mut a_copy:BigInt = a.clone();
-        let mut b_copy:BigInt = b.to_owned();
-        while (b_copy.compare(&zero)) != 0 {
-            if (&b_copy & &one).compare(&zero) != 0 {
-                c = &c + &a_copy;
-            }
-            a_copy = &a_copy << &one;
-            b_copy = &b_copy >> &one;
-        }
-        if (a.negative && !b.negative) || (!a.negative && b.negative) {
-            c.negative = true;
-        } else {
-            c.negative = false;
-        }
-
-        return c;
+    println!("a?=0 : {}", a == &zero);
+    println!("b?=0 : {}", b == &zero);
+    if a.compare(&zero) == 0 || b.compare(&zero) == 0 || a.data.len() == 0 || b.data.len() == 0 {
+        // Hardcode multiply by zero
+        eprintln!("Zero shortcut!");
+        std::io::stdout().flush().unwrap();
+        return zero.clone();
     }
 
+    let a_copy:u64 = a.data[0];
+    let mut b_copy:u64 = b.data[0];
+
+    let mut add_buffer:u64 = 0;
+    let mut top:u64 = a_copy;
+
+    let digit:u64 = b_copy % 2;
+
+    while b_copy > 1 {
+        println!("In the loop.");
+
+        if digit == 1 {
+            add_buffer = add_buffer + top
+        }
+        top = top << 1;
+        b_copy = b_copy >> 1;
+    }
+    println!("Out of the loop.");
+    // TODO: Fix this
+    return create_bigint_from_string(&("0x".to_owned() + &((top + add_buffer).to_string()))).unwrap();
+
+}
+
+fn gradeschool_mul(a: &BigInt, b: &BigInt) -> BigInt {
+    /*
+     * From Wikipedia
+    c = 0
+
+    while b ≠ 0
+        if (b and 1) ≠ 0
+            c = c + a
+        left shift a by 1
+        right shift b by 1
+
+    return c
+    */
+
+    println!("Grade school math: {} {}", a, b);
+
+    let zero:BigInt  = create_bigint_from_string("0x0").unwrap();
+
+    if a.compare(&zero) == 0 || b.compare(&zero) == 0 {
+        // Hardcode multiply by zero
+        return zero.clone();
+    }
+
+    let one:BigInt = create_bigint_from_string("0x1").unwrap();
+    let mut c:BigInt = zero.clone();
+    let mut a_copy:BigInt = a.clone();
+    let mut b_copy:BigInt = b.to_owned();
+    while (b_copy.compare(&zero)) != 0 {
+        if (&b_copy & &one).compare(&zero) != 0 {
+            c = &c + &a_copy;
+        }
+        a_copy = &a_copy << &one;
+        b_copy = &b_copy >> &one;
+    }
+    if (a.negative && !b.negative) || (!a.negative && b.negative) {
+        c.negative = true;
+    } else {
+        c.negative = false;
+    }
+
+    return c;
+}
 
 fn karatsuba_mul(a_orig: &BigInt, b_orig: &BigInt) -> BigInt {
 
@@ -63,7 +117,7 @@ fn karatsuba_mul(a_orig: &BigInt, b_orig: &BigInt) -> BigInt {
     println!("Stored negative: {}", stored_negative);
     // shortcut zero multiply
     let zero:BigInt  = create_bigint_from_string("0x0").unwrap();
-    if a_orig == &zero || b_orig == &zero {
+    if a_orig == &zero || b_orig == &zero || a_orig.data.len() == 0 || b_orig.data.len() == 0 {
         println!("Zero shortcut!");
         return zero;
     }
@@ -77,17 +131,22 @@ fn karatsuba_mul(a_orig: &BigInt, b_orig: &BigInt) -> BigInt {
     // From https://en.wikipedia.org/wiki/Karatsuba_algorithm#Pseudocode
 
     //let max_size:BigInt = create_bigint_from_string("0xffffffffffffffff").unwrap();
-    let max_size:BigInt = create_bigint_from_string("0xffffffffffffffff").unwrap();
+    let max_size:BigInt = create_bigint_from_string("0xffffffffffffff").unwrap();
 
 println!("mult: {} x {}\n",a,b);
 println!("max:  {}\n", max_size);
     if a <= max_size || b <= max_size {
-        println!("Going gradeschool.");
-        return gradeschool_mul(&a_orig, &b_orig);
+        println!("Going doubleadd_mul.");
+        return doubleadd_mul(&a_orig, &b_orig);
     }
     println!("Going karatsuba. {} {}", &a, &b);
     /* Calculates the size of the numbers. */
     //m = min(size_base10(num1), size_base10(num2))
+    if a.data.len() == 1 && b.data.len() == 1 {
+        println!("Got to one data block each!");
+
+        return doubleadd_mul(&a_orig, &b_orig);
+    }
     let m:usize = min(a.data.len(), b.data.len());
     let m2:usize = m / 2; 
     /* m2 = ceil(m / 2) will also work */
