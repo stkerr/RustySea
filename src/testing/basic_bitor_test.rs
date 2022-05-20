@@ -103,3 +103,16 @@ fn test_operator_bitor_length2_unequallengths() {
         panic!("Failed to initialize from string.");
     }
 }
+
+op_test!(basic_bitor_1, "0x1" | "0x1" == "0x1");
+op_test!(basic_bitor_2, "0x1" | "0x2" == "0x3");
+op_test!(basic_bitor_3, "0x1" | "0x3" == "0x3");
+op_test!(basic_bitor_4, "0x1" | "0x4" == "0x5");
+op_test!(basic_bitor_5, "0xF0F0F0F0F0F0F0F0" | "0x0F0F0F0F0F0F0F0F" == "0xFFFFFFFFFFFFFFFF");
+op_test!(basic_bitor_6, "0xF0F0F0F0F0F0F0F0" | "0x0F0F0F0F0F0F0F0F0F0F0F0F0F0F0F0F" == "0x0F0F0F0F0F0F0F0FFFFFFFFFFFFFFFFF");
+op_test!(basic_bitor_7, "0x0F0F0F0F0F0F0F0F0F0F0F0F0F0F0F0F" | "0xF0F0F0F0F0F0F0F0" == "0x0F0F0F0F0F0F0F0FFFFFFFFFFFFFFFFF");
+
+op_test!(basic_bitor_10, "-0x1" | "0x1" == "-0x1");
+op_test!(basic_bitor_11, "-0x1" | "0x2" == "-0x1");
+op_test!(basic_bitor_12, "-0x1" | "0x3" == "-0x1");
+op_test!(basic_bitor_13, "-0x1" | "0x4" == "-0x1");

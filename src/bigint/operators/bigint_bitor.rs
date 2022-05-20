@@ -31,31 +31,66 @@ impl<'a,'b> BitOr<&'a BigInt> for &'b BigInt {
     type Output = BigInt;
 
     fn bitor(self, b: &'a BigInt) -> BigInt {
-        // Add each of the u64 for a&b until there aren't anymore
-        let mut result:BigInt = BigInt {negative: false, data: vec![] };
-        for i in 0..std::cmp::min(self.data.len(), b.data.len()) {
+        
+        let mut a:BigInt;
+        let mut b_copy:BigInt;
+        let _one:BigInt = crate::bigint::utilities::create_bigint_from_string("0x1").unwrap();
+        let mut flip:bool = false;
+        
+        a = self.clone();
+        b_copy = b.clone();
 
-            // Add the digit to the BigInt
-            result.data.push(self.data[i] | b.data[i]);
+        if self.data.len() < b.data.len() {
+            for _i in 0..b.data.len()-a.data.len() {
+                if flip {
+                    // if negative, add a two's complement -2 block
+                    a.data.push(0xfffffffffffffffe);
+                } else {
+                    a.data.push(0);
+                }
+            }
+        } else if a.data.len() > b.data.len() {
+            for _i in 0..a.data.len()-b_copy.data.len() {
+                if flip {
+                    // if negative, add a two's complement -2 block
+                    b_copy.data.push(0xfffffffffffffffe);
+                } else {
+                    b_copy.data.push(0);
+                }
+            }
         }
 
-        let (longer, starting_index) = match self.data.len() == b.data.len() {
-            true => (None, 0),
-            false => match self.data.len() > b.data.len() {
-                true => (Some(self), b.data.len()),
-                false => (Some(b), self.data.len())
-            }
-        };
+        if self.negative {
+            a = a.twos_complement();
+            flip = true;
+        }
 
-        // Add in the longer tail of the two values
-        match longer {
-            Some(x) => {
-                println!("Unequal sizes, parsing the longer.");
-                for i in starting_index..x.data.len() {
-                    result.data.push(x.data[i]);
-                }
-            },
-            None => {}
+        if b.negative {
+            b_copy = b_copy.twos_complement();
+            flip = true;
+        }
+
+        if flip {
+            // if we need to do a sign flip, do that and return the result of the flipped numbers
+            let mut temp:BigInt = a | b_copy;
+            temp.negative=true; // ensure that 2's complement actually sees the value as negative
+            temp = temp.twos_complement();
+            temp.negative=true;
+
+            // We might have a leading 0 block, so drop it if so
+            if temp.data[temp.data.len()-1] == 0 {
+                temp.data.pop();
+            }
+
+            return temp;
+        }
+
+        // Add each of the u64 for a&b until there aren't anymore
+        let mut result:BigInt = BigInt {negative: false, data: vec![] };
+        for i in 0..std::cmp::min(a.data.len(), b_copy.data.len()) {
+
+            // Add the digit to the BigInt
+            result.data.push(a.data[i] | b_copy.data[i]);
         }
 
         return result;
