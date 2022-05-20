@@ -34,34 +34,80 @@ impl<'a,'b> BitXor<&'a BigInt> for &'b BigInt {
     /// parameter. TODO: Investigate if a different behavior should be used.
     fn bitxor(self, b: &'a BigInt) -> BigInt {
         let mut result:BigInt = BigInt {negative: false, data: vec![] };
-        result.negative = self.negative;
 
-        for i in 0..std::cmp::min(self.data.len(), b.data.len()) {
-            // Add the digit to the BigInt
-            result.data.push(self.data[i] ^ b.data[i]);
+        let mut flip:bool = false;
+        let mut a:BigInt = self.clone();
+        let mut b_copy = b.clone();
+
+        if self.negative == true {
+            flip = true;
+            a = self.twos_complement();
         }
 
-        // Find the longer integer if it is there
-        let (longer, starting_index) = match self.data.len() == b.data.len() {
-            true => (None, 0),
-            false => match self.data.len() > b.data.len() {
-                true => (Some(self), b.data.len()),
-                false => (Some(b), self.data.len())
-            }
-        };
+        if b.negative == true {
+            flip = true;
+            b_copy = b_copy.twos_complement();
+        }
 
-        // Add in the longer tail of the two values
-        match longer {
-            Some(x) => {
-                // println!("Unequal sizes, parsing the longer.");
-                for i in starting_index..x.data.len() {
-                    result.data.push(x.data[i]);
+        if self.data.len() < b.data.len() {
+            for _i in 0..b.data.len()-a.data.len() {
+                println!("Adding block a.");
+                if self.negative {
+                    // if negative, add a two's complement -1 block
+                    a.data.push(0xffffffffffffffff);
+                } else {
+                    a.data.push(0);
                 }
-            },
-            None => {
+            }
+        } else if a.data.len() > b.data.len() {
+            for _i in 0..a.data.len()-b_copy.data.len() {
+                
+                if b.negative {
+                    println!("Adding block b.");
+                    // if negative, add a two's complement -1 block
+                    b_copy.data.push(0xffffffffffffffff);
+                } else {
+                    b_copy.data.push(0);
+                }
             }
         }
-        
+
+        if flip {
+            let mut temp:BigInt = a ^ b_copy;
+
+            if self.negative != b.negative {
+                temp.negative = true;
+                temp = temp.twos_complement();
+                temp.negative = true;
+            }
+            
+
+            // We might have a leading 0 block, so drop it if so
+            if temp.data[temp.data.len()-1] == 0 {
+                temp.data.pop();
+            }
+
+            return temp;
+        }
+
+        // Add each of the u64 for a&b until there aren't anymore
+        for i in 0..std::cmp::min(a.data.len(), b_copy.data.len()) {
+
+            // Add the digit to the BigInt
+            assert!(a.negative == false);
+            assert!(b_copy.negative == false);
+            let temp = a.data[i] ^ b_copy.data[i];
+
+            result.data.push(temp);
+        }
+
+        // We might have a leading 0 block, so drop it if so
+        if result.data[result.data.len()-1] == 0 {
+            result.data.pop();
+        }
+
+        // No need to look at tails, since it will always be 0 in a bitwise-and
+        result.negative = self.negative ^ b.negative;
         return result;
     }
 }
