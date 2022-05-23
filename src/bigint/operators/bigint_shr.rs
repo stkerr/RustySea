@@ -44,7 +44,6 @@ impl<'a,'b> Shr<&'a BigInt> for &'b BigInt {
             // Just remove the lowest entry
 
             remaining = remaining - &sixty_four;
-            println!("start_index: {}", start_index);
             start_index -= 1;
         }
 
