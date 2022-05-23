@@ -31,11 +31,9 @@ impl<'a,'b> Shl<&'a BigInt> for &'b BigInt {
     type Output = BigInt;
 
     fn shl(self, b:&'a BigInt) -> BigInt {
-        if b.negative {
-            let mut positive_b = b.clone();
-            positive_b.negative = false;
-            return self >> positive_b;
-        }
+
+        // Negative bit-shifts are unsupported in ISO 9899 (C-language spec)
+        assert!(b.negative == false);
 
         let mut remaining:BigInt = b.clone();
         let sixty_four:BigInt = create_bigint_from_string("0x40").unwrap();

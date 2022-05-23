@@ -11,14 +11,6 @@ fn basic_shl_test_most_basic() {
 }
 
 #[test]
-fn basic_shl_test_negative_shift() {
-    let a:BigInt = create_bigint_from_string("0x1").unwrap();
-    let b:BigInt = create_bigint_from_string("-0x1").unwrap();
-    let c:BigInt = create_bigint_from_string("0x0").unwrap();
-    assert!((a<<b).compare(&c) == 0);
-}
-
-#[test]
 fn basic_shl_test_basic_variety() {
     let a:BigInt = create_bigint_from_string("0x1").unwrap();
     let b:BigInt = create_bigint_from_string("0x3").unwrap();

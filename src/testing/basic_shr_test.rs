@@ -37,6 +37,5 @@ fn basic_shr_test_across_boundary_length_three() {
 
 op_test!(basic_shr_test_across_boundary_length_two, "0xf00df00df00df00dbeefbeef0000000000000000" >> "0x40" == "0xf00df00df00df00dbeefbeef");
 op_test!(basic_shr_test_most_basic, "0x1" >> "0x1" == "0x0");
-op_test!(basic_shr_test_negative_test, "0x1" >> "-0x1" == "0x2");
 op_test!(shr_block_boundary_shift, "0x10000000000000000" >> "0x1" == "0x8000000000000000");
 op_test!(shr_block_boundary_shift_all_zero, "0xFEED10000000000000000" >> "0x80" == "0x0");
