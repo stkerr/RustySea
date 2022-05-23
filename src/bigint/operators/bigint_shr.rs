@@ -31,21 +31,20 @@ impl<'a,'b> Shr<&'a BigInt> for &'b BigInt {
     type Output = BigInt;
 
     fn shr(self, b:&'a BigInt) -> BigInt {
-        if b.negative {
-            let mut positive_b = b.clone();
-            positive_b.negative = false;
-            return self << positive_b;
-        }
+
+        // Negative bit-shifts are unsupported in ISO 9899 (C-language spec)
+        assert!(b.negative == false);
 
         let mut remaining:BigInt = b.clone();
         let sixty_four:BigInt = create_bigint_from_string("0x40").unwrap();
         let mut new_data:Vec<u64> = vec![];
         let mut start_index = self.data.len();
 
-        while remaining.compare(&sixty_four) >= 0 {
+        while remaining.compare(&sixty_four) >= 0 && start_index > 0 {
             // Just remove the lowest entry
 
             remaining = remaining - &sixty_four;
+            println!("start_index: {}", start_index);
             start_index -= 1;
         }
 
